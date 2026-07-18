@@ -89,6 +89,11 @@ body {
   margin-bottom: 0;
 }
 
+.hero__offer {
+  width: 100%;
+  max-width: 832px;
+}
+
 .ai-section__title {
   font-family: 'Cormorant Garamond', Georgia, serif;
   font-size: clamp(1.6rem, 3vw + 0.5rem, 2.5rem);
