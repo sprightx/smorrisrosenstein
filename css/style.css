@@ -1,3 +1,11 @@
+@font-face {
+  font-family: 'Rinter';
+  src: url('../assets/fonts/rinter-font/Rinter.otf') format('opentype');
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+
 *, *::before, *::after {
   box-sizing: border-box;
   margin: 0;
@@ -67,9 +75,9 @@ body {
 }
 
 .hero__title {
-  font-family: 'Cormorant Garamond', Georgia, serif;
+  font-family: 'Rinter', 'Space Grotesk', sans-serif;
   font-size: clamp(1.6rem, 4.5vw + 0.4rem, 3rem);
-  font-weight: 600;
+  font-weight: 400;
   line-height: 1.1;
   letter-spacing: -0.02em;
   color: var(--color-text-primary);
@@ -95,9 +103,9 @@ body {
 }
 
 .ai-section__title {
-  font-family: 'Cormorant Garamond', Georgia, serif;
+  font-family: 'Rinter', 'Space Grotesk', sans-serif;
   font-size: clamp(1.6rem, 3vw + 0.5rem, 2.5rem);
-  font-weight: 600;
+  font-weight: 400;
   line-height: 1.1;
   letter-spacing: -0.02em;
   color: var(--color-text-primary);
