@@ -1,0 +1,458 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Context Library — AI Generation Pipeline</title>
+<link rel="stylesheet" href="colors_and_type.css" />
+<script src="https://unpkg.com/lucide@latest"></script>
+<style>
+  html, body {
+    margin: 0;
+    height: 100%;
+    background: var(--bg-canvas);
+    font-family: var(--font-sans);
+    color: var(--fg-1);
+  }
+  /* ---- Scaling stage: fixed 1600x1000 canvas, letterboxed ---- */
+  #stage {
+    position: fixed;
+    inset: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+  }
+  #canvas {
+    position: relative;
+    width: 1680px;
+    height: 1000px;
+    background: var(--bg-page);
+    flex: none;
+    transform-origin: center center;
+    box-shadow: var(--shadow-lg);
+    overflow: hidden;
+  }
+  /* faint grid texture */
+  #canvas::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background-image:
+      linear-gradient(to right, rgba(16,16,55,.035) 1px, transparent 1px),
+      linear-gradient(to bottom, rgba(16,16,55,.035) 1px, transparent 1px);
+    background-size: 40px 40px;
+    pointer-events: none;
+  }
+
+  /* ---- Header ---- */
+  .header {
+    position: absolute;
+    left: 72px;
+    top: 48px;
+    right: 72px;
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+  }
+  .header .wordmark { height: 26px; display: block; }
+  .header .title-wrap { max-width: 720px; }
+  .header .eyebrow {
+    font-family: var(--font-mono);
+    font-size: 12px;
+    line-height: 18px;
+    letter-spacing: .14em;
+    text-transform: uppercase;
+    color: var(--horizon-blue);
+    font-weight: 400;
+    margin: 0 0 10px 0;
+  }
+  .header h1 {
+    font-family: var(--font-display);
+    font-weight: 300;
+    font-size: 34px;
+    line-height: 42px;
+    letter-spacing: -.01em;
+    margin: 0;
+    color: var(--fg-1);
+  }
+  .header h1 b { font-weight: 500; }
+  .header .meta {
+    text-align: right;
+    font-family: var(--font-mono);
+    font-size: 11px;
+    line-height: 18px;
+    letter-spacing: .08em;
+    text-transform: uppercase;
+    color: var(--fg-3);
+  }
+  .header .meta .pill {
+    display: inline-flex;
+    align-items: center;
+    gap: 7px;
+    padding: 6px 12px;
+    border: 1px solid var(--border-subtle);
+    border-radius: var(--radius-pill);
+    background: var(--bg-page);
+    color: var(--fg-2);
+    margin-bottom: 8px;
+  }
+  .header .meta .dot {
+    width: 7px; height: 7px; border-radius: 50%;
+    background: var(--status-success);
+    box-shadow: 0 0 0 0 rgba(46,160,110,.5);
+    animation: live 2.4s ease-out infinite;
+  }
+  @keyframes live {
+    0% { box-shadow: 0 0 0 0 rgba(46,160,110,.45); }
+    70% { box-shadow: 0 0 0 7px rgba(46,160,110,0); }
+    100% { box-shadow: 0 0 0 0 rgba(46,160,110,0); }
+  }
+
+  /* ---- Stage column labels ---- */
+  .stage-label {
+    position: absolute;
+    font-family: var(--font-mono);
+    font-size: 12px;
+    letter-spacing: .12em;
+    text-transform: uppercase;
+    color: var(--fg-2);
+    font-weight: 400;
+    display: flex;
+    align-items: baseline;
+    gap: 10px;
+  }
+  .stage-label .num { color: var(--horizon-blue); font-weight: 500; }
+  .stage-label .rule { color: var(--fg-muted); }
+
+  /* ---- SVG connector layer ---- */
+  #wires { position: absolute; inset: 0; width: 1680px; height: 1000px; pointer-events: none; }
+
+  /* ---- Source cards ---- */
+  .src {
+    position: absolute;
+    width: 296px;
+    height: 70px;
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    padding: 0 16px;
+    background: var(--bg-card);
+    border: 1px solid var(--border-subtle);
+    border-radius: var(--radius-md);
+    box-shadow: var(--shadow-xs);
+  }
+  .src .ico {
+    flex: none;
+    width: 40px; height: 40px;
+    display: flex; align-items: center; justify-content: center;
+    border-radius: var(--radius-sm);
+    background: var(--light-grey);
+    color: var(--horizon-blue);
+  }
+  .src .ico svg { width: 20px; height: 20px; }
+  .src .body { min-width: 0; }
+  .src .name {
+    font-family: var(--font-display);
+    font-weight: 500;
+    font-size: 16px;
+    line-height: 20px;
+    color: var(--fg-1);
+  }
+  .src .sub {
+    font-family: var(--font-mono);
+    font-size: 10.5px;
+    line-height: 14px;
+    letter-spacing: .06em;
+    text-transform: uppercase;
+    color: var(--fg-3);
+    margin-top: 3px;
+  }
+  .src-group-frame {
+    position: absolute;
+    border: 1px dashed var(--border-strong);
+    border-radius: var(--radius-lg);
+    background: rgba(244,244,244,.45);
+  }
+
+  /* ---- Process nodes ---- */
+  .node {
+    position: absolute;
+    border-radius: var(--radius-lg);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    padding: 26px 22px;
+  }
+  .node .nico {
+    width: 56px; height: 56px;
+    display: flex; align-items: center; justify-content: center;
+    border-radius: var(--radius-md);
+    margin-bottom: 16px;
+  }
+  .node .nico svg { width: 28px; height: 28px; }
+  .node .neyebrow {
+    font-family: var(--font-mono);
+    font-size: 11px;
+    letter-spacing: .12em;
+    text-transform: uppercase;
+    margin: 0 0 8px 0;
+    font-weight: 400;
+  }
+  .node .ntitle {
+    font-family: var(--font-display);
+    font-weight: 500;
+    font-size: 22px;
+    line-height: 27px;
+    margin: 0;
+  }
+  .node .ndesc {
+    font-family: var(--font-sans);
+    font-size: 13px;
+    line-height: 19px;
+    margin: 12px 0 0 0;
+    max-width: 220px;
+  }
+
+  /* MCP node */
+  #mcp {
+    background: var(--night-blue);
+    border: 1px solid var(--night-blue);
+  }
+  #mcp .nico { background: rgba(255,255,255,.08); color: var(--ai-green); }
+  #mcp .neyebrow { color: var(--ai-green); }
+  #mcp .ntitle { color: var(--white); }
+  #mcp .ndesc { color: rgba(255,255,255,.66); }
+
+  /* Claude node */
+  #claude {
+    background: var(--bg-card);
+    border: 1px solid var(--horizon-blue);
+    box-shadow: var(--shadow-md);
+  }
+  #claude .nico { background: var(--horizon-blue); color: var(--white); position: relative; }
+  #claude .nico::after {
+    content: "";
+    position: absolute;
+    inset: -6px;
+    border-radius: var(--radius-md);
+    border: 1.5px solid var(--horizon-blue);
+    opacity: .35;
+    animation: think 2.6s cubic-bezier(.22,1,.36,1) infinite;
+  }
+  @keyframes think {
+    0% { transform: scale(1); opacity: .4; }
+    70% { transform: scale(1.18); opacity: 0; }
+    100% { transform: scale(1.18); opacity: 0; }
+  }
+  #claude .neyebrow { color: var(--horizon-blue); }
+  #claude .ntitle { color: var(--fg-1); }
+  #claude .ndesc { color: var(--fg-2); }
+
+  /* Memory node */
+  #memory {
+    background: var(--gradient-horizon);
+    border: none;
+    box-shadow: 0 18px 44px rgba(15,0,219,.28);
+    overflow: hidden;
+  }
+  #memory::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(115deg, transparent 30%, rgba(255,255,255,.28) 50%, transparent 70%);
+    transform: translateX(-120%);
+    animation: sweep 4.5s ease-in-out infinite;
+  }
+  @keyframes sweep {
+    0%, 22% { transform: translateX(-120%); }
+    55%, 100% { transform: translateX(120%); }
+  }
+  #memory .nico { background: rgba(255,255,255,.18); color: var(--white); }
+  #memory .neyebrow { color: rgba(255,255,255,.85); position: relative; z-index: 1; }
+  #memory .ntitle { color: var(--white); position: relative; z-index: 1; }
+  #memory .ndesc { color: rgba(255,255,255,.9); position: relative; z-index: 1; }
+  #memory .perm {
+    position: relative; z-index: 1;
+    margin-top: 16px;
+    display: inline-flex; align-items: center; gap: 7px;
+    padding: 6px 12px;
+    border-radius: var(--radius-pill);
+    background: rgba(255,255,255,.16);
+    font-family: var(--font-mono);
+    font-size: 10.5px;
+    letter-spacing: .1em;
+    text-transform: uppercase;
+    color: var(--white);
+  }
+  #memory .perm svg { width: 13px; height: 13px; }
+
+  /* output arrow to "every asset" */
+  .footnote {
+    position: absolute;
+    font-family: var(--font-mono);
+    font-size: 11px;
+    letter-spacing: .06em;
+    text-transform: uppercase;
+    color: var(--fg-3);
+  }
+</style>
+</head>
+<body>
+<div id="stage">
+  <div id="canvas">
+
+    <!-- Header -->
+    <div class="header">
+      <div class="title-wrap">
+        <p class="eyebrow">Marketing — AI Context Pipeline</p>
+        <h1>One <b>context library</b> informing every<br />AI-generated marketing asset.</h1>
+      </div>
+      <div class="meta">
+        <span class="pill"><span class="dot"></span> Continuously ingesting</span><br />
+        <span>8 connected sources · via&nbsp;MCP</span>
+      </div>
+    </div>
+
+    <!-- Connector layer -->
+    <svg id="wires" viewBox="0 0 1680 1000" preserveAspectRatio="none">
+      <defs>
+        <linearGradient id="flow" x1="0" y1="0" x2="1" y2="0">
+          <stop offset="0" stop-color="#0f00db" stop-opacity="0"/>
+          <stop offset="0.5" stop-color="#0f00db" stop-opacity="0.55"/>
+          <stop offset="1" stop-color="#0f00db" stop-opacity="0.7"/>
+        </linearGradient>
+        <marker id="arrow" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+          <path d="M0,0 L10,5 L0,10 z" fill="#0f00db"/>
+        </marker>
+      </defs>
+      <g id="fan"></g>
+      <g id="mainwires"></g>
+    </svg>
+
+    <!-- Stage labels -->
+    <div class="stage-label" style="left:72px; top:196px;"><span class="num">01</span><span>Context Library</span><span class="rule">— sources</span></div>
+    <div class="stage-label" style="left:624px; top:196px;"><span class="num">02</span><span>Ingest</span></div>
+    <div class="stage-label" style="left:894px; top:196px;"><span class="num">03</span><span>Analyze</span></div>
+    <div class="stage-label" style="left:1264px; top:196px;"><span class="num">04</span><span>Memory</span></div>
+
+    <!-- Source group frame -->
+    <div class="src-group-frame" style="left:56px; top:230px; width:328px; height:692px;"></div>
+
+    <!-- Source cards (positioned by JS-friendly inline styles) -->
+    <div class="src" style="left:72px; top:246px;"  data-cy="281"><span class="ico" data-i="file-text"></span><div class="body"><div class="name">Product docs</div><div class="sub">Specs · datasheets</div></div></div>
+    <div class="src" style="left:72px; top:330px;"  data-cy="365"><span class="ico" data-i="square-kanban"></span><div class="body"><div class="name">Jira tickets</div><div class="sub">Roadmap · issues</div></div></div>
+    <div class="src" style="left:72px; top:414px;"  data-cy="449"><span class="ico" data-i="notebook-text"></span><div class="body"><div class="name">Confluence articles</div><div class="sub">Internal wiki</div></div></div>
+    <div class="src" style="left:72px; top:498px;"  data-cy="533"><span class="ico" data-i="presentation"></span><div class="body"><div class="name">Sales decks</div><div class="sub">Positioning · pitch</div></div></div>
+    <div class="src" style="left:72px; top:582px;"  data-cy="617"><span class="ico" data-i="audio-lines"></span><div class="body"><div class="name">Call recordings</div><div class="sub">Transcripts</div></div></div>
+    <div class="src" style="left:72px; top:666px;"  data-cy="701"><span class="ico" data-i="hard-drive"></span><div class="body"><div class="name">Google Drive</div><div class="sub">Shared files</div></div></div>
+    <div class="src" style="left:72px; top:750px;"  data-cy="785"><span class="ico" data-i="contact-round"></span><div class="body"><div class="name">HubSpot</div><div class="sub">CRM · campaigns</div></div></div>
+    <div class="src" style="left:72px; top:834px;"  data-cy="869"><span class="ico" data-i="graduation-cap"></span><div class="body"><div class="name">Onboarding materials</div><div class="sub">Enablement</div></div></div>
+
+    <!-- MCP node -->
+    <div class="node" id="mcp" style="left:624px; top:438px; width:150px; height:260px;">
+      <div class="nico" data-i="git-merge"></div>
+      <p class="neyebrow">MCP</p>
+      <h3 class="ntitle">Scan &amp;<br />ingest</h3>
+      <p class="ndesc">Model Context Protocol streams every source into one pipe.</p>
+    </div>
+
+    <!-- Claude node -->
+    <div class="node" id="claude" style="left:894px; top:433px; width:240px; height:270px;">
+      <div class="nico" data-i="sparkles"></div>
+      <p class="neyebrow">Claude</p>
+      <h3 class="ntitle">Analyze &amp; synthesize</h3>
+      <p class="ndesc">Reads, connects and distills context into brand-true knowledge.</p>
+    </div>
+
+    <!-- Memory node -->
+    <div class="node" id="memory" style="left:1264px; top:423px; width:272px; height:290px;">
+      <div class="nico" data-i="database"></div>
+      <p class="neyebrow">Project memory</p>
+      <h3 class="ntitle">Permanent project memory</h3>
+      <p class="ndesc">A persistent brand brain every generation draws from.</p>
+      <span class="perm"><span data-i="infinity"></span> Persistent · always-on</span>
+    </div>
+
+    <div class="footnote" style="left:1264px; top:800px; width:272px; text-align:center;">→ feeds every generated asset</div>
+
+  </div>
+</div>
+
+<script>
+  // ---- Icons ----
+  document.querySelectorAll('[data-i]').forEach(el => {
+    const i = document.createElement('i');
+    i.setAttribute('data-lucide', el.getAttribute('data-i'));
+    el.appendChild(i);
+  });
+  lucide.createIcons();
+
+  // ---- Build connector wires ----
+  const fan = document.getElementById('fan');
+  const SVGNS = 'http://www.w3.org/2000/svg';
+  const srcRightX = 72 + 296;        // 368
+  const mcpLeft = { x: 624, y: 568 }; // fan target (MCP left-center)
+
+  function path(d, opts={}) {
+    const p = document.createElementNS(SVGNS, 'path');
+    p.setAttribute('d', d);
+    p.setAttribute('fill', 'none');
+    p.setAttribute('stroke', opts.stroke || '#0f00db');
+    p.setAttribute('stroke-width', opts.w || 1.5);
+    p.setAttribute('stroke-opacity', opts.o ?? 1);
+    if (opts.dash) { p.setAttribute('stroke-dasharray', opts.dash); }
+    if (opts.cls) p.setAttribute('class', opts.cls);
+    if (opts.marker) p.setAttribute('marker-end', 'url(#arrow)');
+    if (opts.cap) p.setAttribute('stroke-linecap','round');
+    return p;
+  }
+
+  // fan-in curves from each source card to MCP
+  document.querySelectorAll('.src').forEach(card => {
+    const cy = parseFloat(card.dataset.cy);
+    const sx = srcRightX, sy = cy;
+    const tx = mcpLeft.x, ty = mcpLeft.y;
+    const mx = (sx + tx) / 2;
+    const d = `M ${sx} ${sy} C ${mx} ${sy}, ${mx} ${ty}, ${tx} ${ty}`;
+    // base faint line
+    fan.appendChild(path(d, { stroke:'#0f00db', w:1.5, o:0.22, cap:true }));
+    // animated flow dash
+    const flow = path(d, { stroke:'#0f00db', w:2, o:0.85, dash:'2 12', cap:true });
+    flow.style.animation = 'dashmove 1.6s linear infinite';
+    fan.appendChild(flow);
+  });
+
+  // main wires: MCP -> Claude -> Memory
+  const mw = document.getElementById('mainwires');
+  function straight(x1, x2, y, color) {
+    const d = `M ${x1} ${y} L ${x2-2} ${y}`;
+    mw.appendChild(path(d, { stroke:color, w:2.5, o:0.85, marker:true, cap:true }));
+    const flow = path(`M ${x1} ${y} L ${x2-10} ${y}`, { stroke:'#00ffca', w:2.5, o:0.9, dash:'3 14', cap:true });
+    flow.style.animation = 'dashmove 1.3s linear infinite';
+    mw.appendChild(flow);
+  }
+  straight(774, 894, 568, '#0f00db');    // mcp -> claude
+  straight(1134, 1264, 568, '#0f00db');  // claude -> memory
+
+  // dash animation keyframes (inject)
+  const st = document.createElement('style');
+  st.textContent = '@keyframes dashmove { to { stroke-dashoffset: -28; } }';
+  document.head.appendChild(st);
+
+  // ---- Scale canvas to fit viewport ----
+  function fit() {
+    const pad = 32;
+    const s = Math.min(
+      (window.innerWidth - pad) / 1680,
+      (window.innerHeight - pad) / 1000
+    );
+    document.getElementById('canvas').style.transform = `scale(${s})`;
+  }
+  window.addEventListener('resize', fit);
+  fit();
+</script>
+</body>
+</html>

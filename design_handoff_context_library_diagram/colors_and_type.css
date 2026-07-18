@@ -1,0 +1,268 @@
+/* ==========================================================================
+   Aizon — Colors & Typography
+   Source of truth for the Aizon Design System.
+   Extends the tokens from the official zeroheight playbook with semantic
+   aliases and a full type ramp ready to drop into any page.
+   ========================================================================== */
+
+/* ---------- Fonts ---------- */
+@font-face {
+  font-family: "Sneak";
+  src: url("fonts/Sneak-Light.otf") format("opentype");
+  font-weight: 300;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: "Sneak";
+  src: url("fonts/Sneak-Regular.otf") format("opentype");
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: "Sneak";
+  src: url("fonts/Sneak-Regular-Italic.otf") format("opentype");
+  font-weight: 400;
+  font-style: italic;
+  font-display: swap;
+}
+@font-face {
+  font-family: "Sneak";
+  src: url("fonts/Sneak-Medium.otf") format("opentype");
+  font-weight: 500;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: "Sneak";
+  src: url("fonts/Sneak-Bold.otf") format("opentype");
+  font-weight: 700;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "DM Mono";
+  src: url("fonts/DMMono-Light.ttf") format("truetype");
+  font-weight: 300;
+  font-display: swap;
+}
+@font-face {
+  font-family: "DM Mono";
+  src: url("fonts/DMMono-Regular.ttf") format("truetype");
+  font-weight: 400;
+  font-display: swap;
+}
+@font-face {
+  font-family: "DM Mono";
+  src: url("fonts/DMMono-Medium.ttf") format("truetype");
+  font-weight: 500;
+  font-display: swap;
+}
+@font-face {
+  font-family: "DM Sans";
+  src: url("fonts/DMSans-Regular.ttf") format("truetype");
+  font-weight: 400;
+  font-display: swap;
+}
+@font-face {
+  font-family: "DM Sans";
+  src: url("fonts/DMSans-Medium.ttf") format("truetype");
+  font-weight: 500;
+  font-display: swap;
+}
+@font-face {
+  font-family: "DM Sans";
+  src: url("fonts/DMSans-Bold.ttf") format("truetype");
+  font-weight: 700;
+  font-display: swap;
+}
+
+:root {
+  /* ---------- Brand colors (raw, from tokens.css) ---------- */
+  --horizon-blue: #0f00db;  /* MAIN */
+  --ai-green:     #00ffca;
+  --night-blue:   #101037;
+  --grey:         #e8e8e8;
+  --light-grey:   #f4f4f4;
+
+  /* Secondary */
+  --light-blue:      #c0dfff;
+  --light-green:     #c1ffec;
+  --sky-blue:        #adf2fc;
+  --sunrise-orange:  #fea738;
+  --sunset-red:      #ea624a;
+  --code-purple:     #6d4cbc;
+
+  --white: #ffffff;
+  --black: #000000;
+
+  /* ---------- Semantic — foreground ---------- */
+  --fg-1: var(--night-blue);                 /* primary text */
+  --fg-2: #4a4a66;                           /* secondary text (night blue @ 75%) */
+  --fg-3: #8a8aa0;                           /* tertiary / captions */
+  --fg-muted: #b8b8c8;
+  --fg-on-blue:  var(--white);
+  --fg-on-green: var(--night-blue);
+  --fg-link:     var(--horizon-blue);
+
+  /* ---------- Semantic — background ---------- */
+  --bg-page:   var(--white);
+  --bg-canvas: var(--light-grey);
+  --bg-card:   var(--white);
+  --bg-subtle: var(--light-grey);
+  --bg-inverse: var(--night-blue);
+  --bg-brand:   var(--horizon-blue);
+  --bg-accent:  var(--ai-green);
+
+  /* ---------- Semantic — borders ---------- */
+  --border-subtle: var(--grey);
+  --border-strong: #c7c7d4;
+  --border-focus:  var(--horizon-blue);
+
+  /* ---------- Feedback ---------- */
+  --status-success:    #2ea06e;
+  --status-success-bg: var(--light-green);
+  --status-warning:    var(--sunrise-orange);
+  --status-warning-bg: #fff2dc;
+  --status-danger:     var(--sunset-red);
+  --status-danger-bg:  #ffe2db;
+  --status-info:       var(--horizon-blue);
+  --status-info-bg:    var(--light-blue);
+
+  /* ---------- Gradients ---------- */
+  /* Horizon G01 — main gradient: horizon blue → ai green */
+  --gradient-horizon: linear-gradient(135deg, #0f00db 0%, #00ffca 100%);
+  /* Secondary — deep brand gradient for hero backgrounds */
+  --gradient-deep:    linear-gradient(160deg, #101037 0%, #0f00db 55%, #6d4cbc 100%);
+  /* Subtle surface tint */
+  --gradient-surface: linear-gradient(180deg, #ffffff 0%, #f4f4f4 100%);
+
+  /* ---------- Radii ---------- */
+  --radius-xs: 2px;
+  --radius-sm: 4px;
+  --radius-md: 8px;
+  --radius-lg: 16px;
+  --radius-xl: 24px;
+  --radius-pill: 999px;
+
+  /* ---------- Spacing (4pt grid) ---------- */
+  --space-0:  0;
+  --space-1:  4px;
+  --space-2:  8px;
+  --space-3:  12px;
+  --space-4:  16px;
+  --space-5:  24px;
+  --space-6:  32px;
+  --space-7:  48px;
+  --space-8:  64px;
+  --space-9:  96px;
+
+  /* ---------- Shadows ---------- */
+  --shadow-xs: 0 1px 2px rgba(16, 16, 55, 0.06);
+  --shadow-sm: 0 2px 6px rgba(16, 16, 55, 0.08);
+  --shadow-md: 0 8px 24px rgba(16, 16, 55, 0.10);
+  --shadow-lg: 0 20px 48px rgba(16, 16, 55, 0.14);
+  --shadow-focus: 0 0 0 3px rgba(15, 0, 219, 0.22);
+
+  /* ---------- Type — raw families ---------- */
+  --font-sans:    "Sneak", "DM Sans", -apple-system, BlinkMacSystemFont, "Helvetica Neue", Arial, sans-serif;
+  --font-display: "Sneak", "DM Sans", -apple-system, BlinkMacSystemFont, sans-serif;
+  --font-mono:    "DM Mono", ui-monospace, "SF Mono", Menlo, Consolas, monospace;
+  --font-internal: "DM Sans", -apple-system, BlinkMacSystemFont, sans-serif;
+
+  /* ---------- Type — scale (from zeroheight tokens) ---------- */
+  /* Display / H1 — Sneak Light */
+  --h1-family: var(--font-display);
+  --h1-size: 48px;
+  --h1-line: 60px;
+  --h1-weight: 300;
+  --h1-letter: -0.01em;
+
+  /* H2 — Sneak Regular */
+  --h2-family: var(--font-display);
+  --h2-size: 28px;
+  --h2-line: 36px;
+  --h2-weight: 400;
+
+  /* H3 — Sneak Medium (additive, not in tokens.json but implied) */
+  --h3-family: var(--font-display);
+  --h3-size: 22px;
+  --h3-line: 30px;
+  --h3-weight: 500;
+
+  /* H4 — Sneak Bold */
+  --h4-family: var(--font-display);
+  --h4-size: 18px;
+  --h4-line: 27px;
+  --h4-weight: 700;
+
+  /* Eyebrow / Label — DM Mono Light UPPERCASE, horizon blue */
+  --label-family: var(--font-mono);
+  --label-size: 12px;
+  --label-line: 18px;
+  --label-weight: 300;
+  --label-tracking: 0.08em;
+
+  /* Body 1 — Sneak Regular */
+  --body1-family: var(--font-sans);
+  --body1-size: 14px;
+  --body1-line: 21px;
+  --body1-weight: 400;
+
+  /* Body 2 — Sneak Regular 12 */
+  --body2-family: var(--font-sans);
+  --body2-size: 12px;
+  --body2-line: 18px;
+  --body2-weight: 400;
+
+  /* Caption / legal — DM Sans */
+  --caption-family: var(--font-internal);
+  --caption-size: 10px;
+  --caption-line: 15px;
+  --caption-weight: 400;
+
+  /* Code / data */
+  --code-family: var(--font-mono);
+  --code-size: 13px;
+  --code-line: 20px;
+}
+
+/* ========================================================================
+   Semantic utility classes
+   ======================================================================== */
+
+.az-h1 { font-family: var(--h1-family); font-size: var(--h1-size); line-height: var(--h1-line); font-weight: var(--h1-weight); letter-spacing: var(--h1-letter); color: var(--fg-1); margin: 0; }
+.az-h2 { font-family: var(--h2-family); font-size: var(--h2-size); line-height: var(--h2-line); font-weight: var(--h2-weight); color: var(--fg-1); margin: 0; }
+.az-h3 { font-family: var(--h3-family); font-size: var(--h3-size); line-height: var(--h3-line); font-weight: var(--h3-weight); color: var(--fg-1); margin: 0; }
+.az-h4 { font-family: var(--h4-family); font-size: var(--h4-size); line-height: var(--h4-line); font-weight: var(--h4-weight); color: var(--fg-1); margin: 0; }
+
+.az-eyebrow,
+.az-label {
+  font-family: var(--label-family);
+  font-size: var(--label-size);
+  line-height: var(--label-line);
+  font-weight: var(--label-weight);
+  letter-spacing: var(--label-tracking);
+  text-transform: uppercase;
+  color: var(--horizon-blue);
+  margin: 0;
+}
+
+.az-body  { font-family: var(--body1-family); font-size: var(--body1-size); line-height: var(--body1-line); color: var(--fg-1); margin: 0; }
+.az-body-2 { font-family: var(--body2-family); font-size: var(--body2-size); line-height: var(--body2-line); color: var(--fg-1); margin: 0; }
+.az-caption { font-family: var(--caption-family); font-size: var(--caption-size); line-height: var(--caption-line); color: var(--fg-3); margin: 0; }
+.az-code    { font-family: var(--code-family); font-size: var(--code-size); line-height: var(--code-line); color: var(--fg-1); }
+
+/* Element defaults — opt-in by adding class .az to a root container */
+.az, .az * { box-sizing: border-box; }
+.az { font-family: var(--font-sans); color: var(--fg-1); background: var(--bg-page); }
+.az h1 { font: var(--h1-weight) var(--h1-size)/var(--h1-line) var(--h1-family); letter-spacing: var(--h1-letter); margin: 0; }
+.az h2 { font: var(--h2-weight) var(--h2-size)/var(--h2-line) var(--h2-family); margin: 0; }
+.az h3 { font: var(--h3-weight) var(--h3-size)/var(--h3-line) var(--h3-family); margin: 0; }
+.az h4 { font: var(--h4-weight) var(--h4-size)/var(--h4-line) var(--h4-family); margin: 0; }
+.az p  { font: var(--body1-weight) var(--body1-size)/var(--body1-line) var(--body1-family); margin: 0; }
+.az code, .az kbd, .az pre { font-family: var(--code-family); }
+.az a { color: var(--fg-link); text-decoration: none; border-bottom: 1px solid transparent; transition: border-color 120ms ease; }
+.az a:hover { border-bottom-color: currentColor; }
