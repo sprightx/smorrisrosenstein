@@ -35,7 +35,7 @@ document.addEventListener('DOMContentLoaded', function () {
     var p = document.createElementNS(SVGNS, 'path');
     p.setAttribute('d', d);
     p.setAttribute('fill', 'none');
-    p.setAttribute('stroke', opts.stroke || '#0f00db');
+    p.setAttribute('stroke', opts.stroke || '#E4F222');
     p.setAttribute('stroke-width', opts.w || 1.5);
     p.setAttribute('stroke-opacity', opts.o != null ? opts.o : 1);
     if (opts.dash)   p.setAttribute('stroke-dasharray', opts.dash);
@@ -51,9 +51,9 @@ document.addEventListener('DOMContentLoaded', function () {
     var d  = 'M ' + SRC_RIGHT_X + ' ' + cy +
              ' C ' + mx + ' ' + cy + ', ' + mx + ' ' + MCP_LEFT.y + ', ' + MCP_LEFT.x + ' ' + MCP_LEFT.y;
     // Static faint base
-    fan.appendChild(makePath(d, { stroke: '#0f00db', w: 1.5, o: 0.22, cap: true }));
+    fan.appendChild(makePath(d, { stroke: '#E4F222', w: 1.5, o: 0.22, cap: true }));
     // Animated flow dash
-    var flow = makePath(d, { stroke: '#0f00db', w: 2, o: 0.85, dash: '2 12', cap: true });
+    var flow = makePath(d, { stroke: '#E4F222', w: 2, o: 0.85, dash: '2 12', cap: true });
     flow.style.animation = 'ctx-dashmove 1.6s linear infinite';
     fan.appendChild(flow);
   });
@@ -62,11 +62,11 @@ document.addEventListener('DOMContentLoaded', function () {
   function straight(x1, x2, y) {
     mainwires.appendChild(makePath(
       'M ' + x1 + ' ' + y + ' L ' + (x2 - 2) + ' ' + y,
-      { stroke: '#0f00db', w: 2.5, o: 0.85, marker: true, cap: true }
+      { stroke: '#E4F222', w: 2.5, o: 0.85, marker: true, cap: true }
     ));
     var flow = makePath(
       'M ' + x1 + ' ' + y + ' L ' + (x2 - 10) + ' ' + y,
-      { stroke: '#00ffca', w: 2.5, o: 0.9, dash: '3 14', cap: true }
+      { stroke: '#A8E6CF', w: 2.5, o: 0.9, dash: '3 14', cap: true }
     );
     flow.style.animation = 'ctx-dashmove 1.3s linear infinite';
     mainwires.appendChild(flow);
