@@ -5,7 +5,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta name="description"
-    content="Sam Morris-Rosenstein — My Work. A portfolio of B2B marketing programs, campaigns, and assets.">
+    content="Sam Morris-Rosenstein — My Work. A resource center of B2B marketing plans, frameworks, and AI skills you can open and explore.">
   <title>My Work — Sam Morris-Rosenstein, B2B Marketer</title>
 
   <link rel="icon" type="image/svg+xml" href="favicon.svg">
@@ -23,30 +23,39 @@
     <div class="work__header">
       <p class="hero__name">SAM MORRIS-ROSENSTEIN</p>
       <h1 class="hero__title">My Work</h1>
+      <p class="work__intro">A working library of the marketing assets and AI tools I've built — real plans,
+        frameworks, and skills you can open and explore. Each one links to a closer look at the work. I'll keep
+        adding as I build.</p>
     </div>
 
     <div class="work__list">
 
-      <!-- Replace src, alt, and caption for each item.                        -->
-      <!-- For a linked caption, wrap the text in:                             -->
-      <!-- <a href="YOUR_URL" class="work-item__link">Description</a>          -->
+      <!-- ITEM TEMPLATE — to add a resource, copy one <article> block and update the -->
+      <!-- title, preview, description, and button link. To swap in a real screenshot, -->
+      <!-- replace the placeholder <div> with:                                          -->
+      <!-- <img class="resource__img" src="assets/screenshots/FILE.png" alt="ALT TEXT"> -->
 
-      <figure class="work-item">
-        <img src="assets/screenshots/placeholder-1.png" alt="Description of work item" class="work-item__img">
-        <figcaption class="work-item__caption">Description of this work item.</figcaption>
-      </figure>
+      <article class="resource">
+        <h2 class="resource__title">Example 30-60-90 PMM plan</h2>
+        <div class="resource__preview resource__preview--placeholder" data-label="Preview"></div>
+        <p class="resource__desc">A structured 30-60-90 day plan for a product marketer stepping into a new role or
+          product line. It lays out what to learn, what to build, and where to drive impact across the first three
+          months — with concrete priorities and milestones for each phase.</p>
+        <a href="pmm-30-60-90-plan.html" class="resource__cta">
+          View the plan <span class="resource__cta-arrow" aria-hidden="true">&rarr;</span>
+        </a>
+      </article>
 
-      <figure class="work-item">
-        <img src="assets/screenshots/placeholder-2.png" alt="Description of work item" class="work-item__img">
-        <figcaption class="work-item__caption">
-          <a href="#" class="work-item__link">Description with a link to the asset.</a>
-        </figcaption>
-      </figure>
-
-      <figure class="work-item">
-        <img src="assets/screenshots/placeholder-3.png" alt="Description of work item" class="work-item__img">
-        <figcaption class="work-item__caption">Description of this work item.</figcaption>
-      </figure>
+      <article class="resource">
+        <h2 class="resource__title">Battlecard .SKILL</h2>
+        <div class="resource__preview resource__preview--placeholder" data-label="Preview"></div>
+        <p class="resource__desc">A reusable Claude skill that turns your product and competitive context into
+          sales-ready battlecards. Feed it your positioning, competitor intel, and win/loss notes, and it produces a
+          consistent, on-brand battlecard on demand — an example of how I package marketing expertise into AI skills.</p>
+        <a href="battlecard-skill.html" class="resource__cta">
+          View the skill <span class="resource__cta-arrow" aria-hidden="true">&rarr;</span>
+        </a>
+      </article>
 
     </div>
   </main>

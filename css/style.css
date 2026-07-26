@@ -612,7 +612,7 @@ body.page-home {
 
 body.page-work {
   display: block;
-  padding: 5rem 2rem 5rem;
+  padding: 5rem 2rem 6rem;
 }
 
 .work {
@@ -624,56 +624,150 @@ body.page-work {
   margin-bottom: 3.5rem;
 }
 
-.work__list {
-  display: flex;
-  flex-direction: column;
-  gap: 3.5rem;
+.work__header .hero__title {
+  margin-bottom: 1.5rem;
 }
 
-.work-item {
+.work__intro {
+  font-family: 'Space Grotesk', -apple-system, BlinkMacSystemFont, sans-serif;
+  font-size: clamp(0.9rem, 1.35vw + 0.45rem, 1.013rem);
+  font-weight: 300;
+  line-height: 1.75;
+  color: var(--color-text-secondary);
   margin: 0;
 }
 
-.work-item__img {
-  width: 100%;
+.work__list {
+  display: flex;
+  flex-direction: column;
+  gap: 2.5rem;
+}
+
+/* Resource card */
+.resource {
+  border: 1px solid #1e1e1e;
+  border-radius: 14px;
+  background: #0d0d0d;
+  padding: 1.75rem;
+  transition: border-color 0.2s ease;
+}
+
+.resource:hover {
+  border-color: #2c2c2c;
+}
+
+.resource__title {
+  font-family: 'Rinter', 'Space Grotesk', sans-serif;
+  font-size: clamp(1.3rem, 2vw + 0.6rem, 1.6rem);
+  font-weight: 400;
+  letter-spacing: -0.01em;
+  line-height: 1.2;
+  color: var(--color-text-primary);
+  margin-bottom: 1.25rem;
+}
+
+.resource__preview {
   display: block;
+  position: relative;
+  width: 100%;
+  aspect-ratio: 16 / 9;
+  border-radius: 8px;
+  overflow: hidden;
   background-color: #111111;
-  min-height: 280px;
+  margin-bottom: 1.25rem;
+}
+
+.resource__img {
+  width: 100%;
+  height: 100%;
+  display: block;
   object-fit: cover;
 }
 
-.work-item__caption {
+/* Placeholder shown until a real screenshot is dropped in */
+.resource__preview--placeholder {
+  background-image:
+    linear-gradient(rgba(255, 255, 255, 0.02) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255, 255, 255, 0.02) 1px, transparent 1px),
+    linear-gradient(135deg, #161616 0%, #0f0f0f 100%);
+  background-size: 32px 32px, 32px 32px, 100% 100%;
+}
+
+.resource__preview--placeholder::after {
+  content: attr(data-label);
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
   font-family: 'Space Grotesk', -apple-system, BlinkMacSystemFont, sans-serif;
-  font-size: 0.875rem;
+  font-size: 0.72rem;
+  font-weight: 400;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: #3a3a3a;
+}
+
+.resource__desc {
+  font-family: 'Space Grotesk', -apple-system, BlinkMacSystemFont, sans-serif;
+  font-size: 0.9375rem;
   font-weight: 300;
+  line-height: 1.65;
   color: var(--color-text-secondary);
-  margin-top: 0.75rem;
-  line-height: 1.5;
+  margin: 0 0 1.5rem;
 }
 
-.work-item__link {
-  color: var(--color-link);
+.resource__cta {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-family: 'Space Grotesk', -apple-system, BlinkMacSystemFont, sans-serif;
+  font-size: 0.78rem;
+  font-weight: 400;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--color-text-primary);
   text-decoration: none;
-  border-bottom: 1px solid var(--color-link-underline);
-  padding-bottom: 1px;
-  transition: color 0.2s ease, border-bottom-color 0.2s ease;
+  padding: 0.7rem 1.25rem;
+  border: 1px solid #2c2c2c;
+  border-radius: 999px;
+  transition: border-color 0.2s ease, background-color 0.2s ease;
 }
 
-.work-item__link:hover {
-  color: var(--color-link-hover);
-  border-bottom-color: var(--color-link-hover);
+.resource__cta:hover {
+  border-color: var(--color-link-hover);
+  background-color: rgba(240, 237, 232, 0.04);
 }
 
-.work-item__link:focus-visible {
-  color: var(--color-link-hover);
-  border-bottom-color: var(--color-link-hover);
+.resource__cta:focus-visible {
   outline: 2px solid var(--color-link-hover);
-  outline-offset: 4px;
-  border-radius: 2px;
+  outline-offset: 3px;
+}
+
+.resource__cta-arrow {
+  transition: transform 0.2s ease;
+}
+
+.resource__cta:hover .resource__cta-arrow {
+  transform: translateX(3px);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .resource__cta-arrow {
+    transition: none;
+  }
 }
 
 @media (max-width: 480px) {
   .hero__links {
     gap: 1.25rem;
+  }
+
+  body.page-work {
+    padding: 3.5rem 1.25rem 4rem;
+  }
+
+  .resource {
+    padding: 1.25rem;
   }
 }
