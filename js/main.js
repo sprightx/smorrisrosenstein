@@ -10,6 +10,49 @@ document.addEventListener('DOMContentLoaded', function () {
     emailDialog.addEventListener('click',  function (e) { if (e.target === emailDialog) emailDialog.close(); });
   }
 
+  // ---- Copy code block ----
+  var copyBtn = document.querySelector('.codeblock__copy');
+  if (copyBtn) {
+    var copyTarget = document.getElementById(copyBtn.dataset.target);
+    var copyReset;
+
+    var copyText = function (text) {
+      if (navigator.clipboard && navigator.clipboard.writeText) {
+        return navigator.clipboard.writeText(text);
+      }
+      return new Promise(function (resolve, reject) {
+        try {
+          var ta = document.createElement('textarea');
+          ta.value = text;
+          ta.setAttribute('readonly', '');
+          ta.className = 'visually-hidden-field';
+          document.body.appendChild(ta);
+          ta.select();
+          document.execCommand('copy');
+          document.body.removeChild(ta);
+          resolve();
+        } catch (err) {
+          reject(err);
+        }
+      });
+    };
+
+    copyBtn.addEventListener('click', function () {
+      if (!copyTarget) return;
+      copyText(copyTarget.textContent).then(function () {
+        copyBtn.classList.add('is-copied');
+        copyBtn.setAttribute('aria-label', 'Copied to clipboard');
+        window.clearTimeout(copyReset);
+        copyReset = window.setTimeout(function () {
+          copyBtn.classList.remove('is-copied');
+          copyBtn.setAttribute('aria-label', 'Copy skill to clipboard');
+        }, 2000);
+      }).catch(function () {
+        copyBtn.setAttribute('aria-label', 'Copy failed — select the text manually');
+      });
+    });
+  }
+
   // ---- Context Pipeline Diagram ----
   var canvas  = document.getElementById('ctx-canvas');
   var scaler  = document.getElementById('ctx-pipeline-scaler');

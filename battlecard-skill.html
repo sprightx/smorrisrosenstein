@@ -1,0 +1,431 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description"
+    content="Battlecard .SKILL — a reusable Claude skill that turns your product and competitive context into sales-ready battlecards.">
+  <title>Battlecard .SKILL — Sam Morris-Rosenstein</title>
+
+  <link rel="icon" type="image/svg+xml" href="favicon.svg">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400&family=Space+Grotesk:wght@300;400&display=swap"
+    rel="stylesheet">
+
+  <link rel="stylesheet" href="css/style.css">
+</head>
+
+<body class="page-entry">
+  <nav class="site-nav" aria-label="Site navigation">
+    <div class="site-nav__inner">
+      <a href="work.html" class="link" aria-label="Back to my work">Work</a>
+      <a href="https://www.linkedin.com/in/smorrisrosenstein/" class="link" aria-label="Sam Morris on LinkedIn"
+        target="_blank" rel="noopener noreferrer">LinkedIn</a>
+      <button type="button" class="link" id="email-trigger" aria-label="Email Sam Morris">Email</button>
+    </div>
+  </nav>
+
+  <main class="entry">
+    <header class="entry__header">
+      <p class="hero__name">SAM MORRIS-ROSENSTEIN</p>
+      <h1 class="hero__title">Battlecard .SKILL</h1>
+    </header>
+
+    <p class="entry__lead">A reusable Claude skill that turns your product and competitive context into sales-ready
+      battlecards. Point it at your positioning, competitor intel, and win/loss notes, and it produces a consistent,
+      on-brand battlecard on demand — drafted, quality-gated, and SME-reviewed before it lands. It's a working example
+      of how I package marketing and enablement expertise into AI skills the whole team can reuse. (This is a generic
+      version of a skill I run in production; product names, competitors, and proprietary specifics are placeholders.)</p>
+
+    <section class="entry__section">
+      <h2 class="entry__heading">How to use this skill</h2>
+      <p class="entry__body">Drop this skill into Claude Code — or any Claude project that supports skills — then invoke
+        it whenever you need a competitive battlecard.</p>
+      <ol class="entry__steps">
+        <li class="entry__step">Save the markdown below as <code class="entry__inline-code">SKILL.md</code> inside a
+          folder named <code class="entry__inline-code">battle-card/</code> in your project's
+          <code class="entry__inline-code">.claude/skills/</code> directory.</li>
+        <li class="entry__step">Connect your context — product overview, messaging framework, competitive landscape, ICP
+          personas, brand voice — so the skill has real source material to draw from instead of guessing.</li>
+        <li class="entry__step">Invoke it with a product and a competitor. The skill loads context, drafts the card in a
+          fixed structure, runs the quality gates, and sends it through SME review.</li>
+        <li class="entry__step">Own the last mile: apply the SME's revisions, verify the sourcing, and ship it to your
+          sales team.</li>
+      </ol>
+    </section>
+
+    <section class="entry__section">
+      <h2 class="entry__heading">The skill</h2>
+      <div class="codeblock">
+        <div class="codeblock__bar">
+          <span class="codeblock__label">SKILL.md</span>
+          <button type="button" class="codeblock__copy" data-target="skill-code" aria-label="Copy skill to clipboard">
+            <svg class="codeblock__icon codeblock__icon--copy" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+              stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <rect width="14" height="14" x="8" y="8" rx="2" ry="2" />
+              <path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2" />
+            </svg>
+            <svg class="codeblock__icon codeblock__icon--check" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+              stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <path d="M20 6 9 17l-5-5" />
+            </svg>
+          </button>
+        </div>
+        <pre class="codeblock__pre"><code class="codeblock__code" id="skill-code">---
+name: battle-card
+description: Produce a finalized internal sales battle card for a product vs. a named competitor. Checks the competitive-matrix folder for existing intel, loads required context, drafts the card in the standard format, runs SME review, and writes the final file. Use when the user asks to "build a battle card," "create a battle card," or "write a battle card" for a specific product/competitor matchup.
+argument-hint: "[Product] [Competitor]"
+disable-model-invocation: true
+---
+
+# Battle Card: $ARGUMENTS
+
+You are the senior product marketer. Route this task to: Content Writer
+(primary) with Product Marketer competitive inputs.
+
+Parse $ARGUMENTS as two values: [Product] and [Competitor]. If either is
+ambiguous, ask before proceeding.
+
+---
+
+## Phase 1: Load Context
+
+Load these files in full before doing anything else:
+
+- context/competitive-landscape.md — competitive categories, win/loss themes,
+  existing counter-messages
+- context/messaging-framework.md — proof point library (Gate 1: every product
+  metric must trace here), messaging pillars, persona-to-pillar mapping,
+  do's and don'ts
+- context/product-overview.md — full platform architecture, applications,
+  compliance, time-to-value, named customer proof points
+- context/icp-personas.md — buyer personas, pain points, objections — essential
+  for counter-message framing
+- context/brand-voice.md — tone guidance; battle cards use the "blunt and
+  direct" register
+
+Then check sales-enablement/competitive-matrix/ for an existing matrix file
+covering this matchup (e.g., product-a-vs-competitor-x.md). If a file exists,
+read it in full — it is the primary source of intelligence for this battle card
+and supersedes web research. Note what is already documented so you do not
+contradict it or duplicate the work.
+
+If no matrix file exists for this matchup, flag it to the user: "No competitive
+matrix found for [Product] vs. [Competitor]. I'll proceed from the context files
+and competitive-landscape.md — a full matrix should be created after this battle
+card to preserve the research." Then proceed with available context.
+
+### Competitor research (for the Market Position block)
+
+The battle card includes a Market Position firmographics block (Phase 3,
+Section 3) and sourced competitor weaknesses (Section 6). If the
+competitive-matrix file or context/competitive-landscape.md does not already
+supply these, research them now via WebSearch / WebFetch:
+
+- Firmographics: founding year, HQ, ownership, headcount, revenue, customer
+  count, funding history
+- Third-party review scores: G2, Gartner Peer Insights, Capterra (rating +
+  review count)
+- Certifications, target verticals, key named customers
+- Directional pricing tiers (public list/entry prices only)
+- Sourced quotes for the weakness section: the competitor's own positioning
+  docs, analyst coverage, and review-platform themes
+
+Every competitor fact must carry a named source (Gate — Competitor-fact
+sourcing, Phase 4). Label beta/roadmap features as such. If a fact cannot be
+verified, flag it and leave it out — never invent firmographics or scores.
+
+---
+
+## Phase 2: Establish the Matchup Frame
+
+Before writing, answer these questions from the files you have loaded:
+
+1. What competitive category does this competitor belong to, and does it match
+   the product's category? (from context/competitive-landscape.md) If the
+   pairing is mismatched — e.g., a request to compare a data/analytics product
+   against an execution/workflow competitor — stop and confirm scope. Never
+   build a card that compares your product to a category it does not compete in.
+2. What is the primary persona facing this competitor in a deal?
+   (e.g., economic buyer, technical evaluator, end user, IT/security)
+3. What are the 2–3 most likely objection scenarios in this matchup? (from
+   win/loss themes and counter-messages in the competitive landscape and any
+   existing matrix file)
+4. Is this a direct head-to-head or an incumbent/adjacent scenario? This shapes
+   the Strategic Frame (Section 1) — for incumbents and adjacent/complementary
+   systems, the frame leads with "and not or" positioning before the
+   competitive sections begin.
+5. What are the 2–3 priority deal scenarios for this matchup? Order them by win
+   probability (e.g., "buyer already owns a competing system," "greenfield
+   evaluation," "competitor already installed"). These seed the Deal Playbooks
+   section (Section 9).
+
+Do not proceed to drafting until you have clear answers to all five. If the
+competitive-landscape.md or matrix file does not provide enough to answer
+question 3 or 5, note the gap in the card's sources footer.
+
+---
+
+## Phase 3: Draft the Battle Card
+
+Write the battle card in the following structure exactly. Do not rename or
+reorder sections. This is a comprehensive internal asset. Each section carries a
+length target; respect it so the card stays scannable. Cut repetition, never
+substance.
+
+---
+
+### [Product] vs. [Competitor] — Battle Card
+
+INTERNAL USE ONLY. Not for external distribution, customer-facing proposals, or
+marketing copy.
+
+---
+
+### 1. Read This First — Strategic Frame
+
+(Mandatory.) 3–5 sentences. Name the real fight in plain language: what the
+buyer is actually deciding, why the competitor is or is not a true category peer
+to this product, and the one-line strategic posture. For incumbent or
+adjacent/complementary competitors, lead with "and not or" positioning. This
+orients the rep before any detail.
+
+### 2. Who They Are &amp; What They Sell
+
+One-sentence summary (category, primary market, what they do not do that is
+relevant here). Then a short product/module decomposition: what each product or
+module does, what is in and out of scope, and directional public pricing tiers
+where known. Be precise — no editorializing. (4–8 lines plus the decomposition.)
+
+### 3. Market Position
+
+(Firmographics block.) A compact fact list giving the rep credibility context
+and risk framing: founding year, HQ, ownership, headcount, revenue, customer
+count, funding history, third-party review scores (G2 / Gartner Peer Insights /
+Capterra — rating + count), certifications, target verticals, key named
+customers. Every fact carries a source (Phase 4 sourcing gate). Flag anything
+unverifiable and leave it out — never invent firmographics or scores.
+
+### 4. Where We Beat Them
+
+3–5 bullets. Each bullet has a bold label followed by the explanation. Cover the
+most decisive differentiators for this specific matchup — do not default to
+generic advantages. Draw from: speed, compliance design, data model,
+domain-specific AI, cost, implementation effort, independence from lock-in, or
+whatever is most relevant to this competitor.
+
+### 5. Their Genuine Strengths
+
+3–5 bullets, each with a bold descriptor. Be honest — these are real strengths
+and their strongest legitimate positioning, not strawmen. If they have a genuine
+edge (installed base, connectivity, broader scope, compliance pedigree,
+integration story), say so plainly. Acknowledging real strength is what makes
+the counter credible.
+
+### 6. Their Real Weaknesses
+
+3–6 bullets with bold labels. Weaknesses to exploit, each grounded in a sourced
+competitor quote, review theme, or the competitor's own documentation — not
+assertion. Label beta/roadmap capabilities as such. This is where the rep finds
+the wedge.
+
+### 7. Head-to-Head Comparison
+
+A multi-dimension comparison table ([Product] vs. [Competitor]) across ~12–18
+dimensions (category, what it actually does, scope, compliance/security posture,
+speed, AI capability, deployment time, customer-side effort, pricing model,
+implementation complexity, works-alongside-existing-systems, expansion path,
+cloud, best fit for). If a competitive-matrix file exists for this matchup,
+source the table from it rather than rebuilding — do not contradict it.
+
+### 8. Objection Handling
+
+A table of 5–6 likely buyer objections. Columns: What they say | How to respond.
+Each response is direct speech a rep can internalize and say, grounded in a
+specific differentiator or approved proof point. No vague qualifiers.
+
+### 9. Deal Playbooks
+
+2–3 priority-ordered deal scenarios (highest win probability first), from the
+scenarios established in Phase 2. For each: the situation, why it's our
+position, the entry-point persona to lead with, and a rep pitch script in direct
+speech.
+
+### 10. When to Engage vs. When to Walk Away
+
+Two labelled lists:
+- Proceed signals — deal conditions where you should lean in and win this
+  matchup.
+- Walk-away / disqualify signals — where the competitor has a structural edge or
+  the deal is not your fight; qualify out early. Frame this as credibility
+  protection: a lost deal you should have walked away from costs more than a
+  well-fought one. Retain your ICP guardrails (segment, company size, fit).
+
+### 11. Landmines to Plant
+
+4–5 discovery questions a rep seeds with the prospect so the prospect
+interrogates the competitor's weak spots before the next meeting. Each question
+is followed by a one-line note on what it exposes. Questions target real,
+sourced weaknesses — not strawmen.
+
+### 12. Traps to Avoid
+
+3–6 bullets. What our own reps should NOT do in this matchup: attacking a
+genuine competitor strength, over-claiming, dismissing real (if narrow)
+competitor capabilities, competing on scope we don't have, or failing to
+qualify. Protects reps from credibility-damaging moves.
+
+### 13. Proof Points to Cite
+
+2–3 bullet points. Each traces to the approved proof point library in
+context/messaging-framework.md. Format:
+- [Metric or outcome] — [customer descriptor, product]
+
+Do not cite any metric not in the approved library. If a relevant proof point is
+missing, flag it: "This claim is not in the approved proof point library —
+confirm source before publishing."
+
+### 14. Kill Phrase
+
+One sentence in a blockquote. Frames the matchup in your favor without
+disparaging the competitor. Specific, not generic. If the competitive matrix
+file includes an approved kill phrase, use it exactly.
+
+### 15. For Partner Teams
+
+A condensed, channel-ready summary so a partner rep can carry the matchup
+without the full card:
+- Short version — 2–4 sentences on who the competitor is and where you compete.
+- Lead with us when — bulleted conditions.
+- Defer when — bulleted conditions.
+- Most common win scenario — 1–2 sentences.
+
+---
+
+Sources: All product proof points trace to the approved proof point library in
+context/messaging-framework.md. All competitor firmographics, review scores,
+pricing, and capability claims are cited to named sources (vendor site, G2 /
+Gartner / Capterra, analyst coverage, or the competitor's own documentation).
+[Cite the competitive matrix file if used, or note "No competitive matrix on
+file."] Battle card version: [Month Year].
+
+---
+
+## Phase 4: Quality Gates
+
+Run these before writing. Apply during writing.
+
+- Gate 1 — No invented proof points (product claims). Every product metric
+  traces to the proof point library in context/messaging-framework.md. If a
+  metric is not there, flag it and hold the claim.
+- Gate 1b — Competitor-fact sourcing. Every competitor firmographic, review
+  score, pricing figure, and capability claim carries a named source. Beta/
+  roadmap features are labelled as such. Any competitor fact that cannot be
+  verified is flagged and left out — never invented.
+- Gate 2 — Product scope. Keep the product's category precise; never claim scope
+  the product does not have, even defensively, and never let a differentiator
+  drift into a category the product does not compete in.
+- Gate 2b — Proof-point segregation. Keep proof points in-scope for the product
+  line being sold; never borrow a metric from a different product line. A
+  roadmap path may be cited as a differentiator, never as a shipped outcome
+  metric.
+- Gate 3 — No vague AI language. Never: "AI-powered" (standalone),
+  "revolutionary," "game-changing," "transformative," "cutting-edge." Be
+  specific about what the AI does.
+- Gate 4 — Respect prohibited comparisons. Do not make comparisons your legal or
+  positioning guidelines disallow. This card is internal-only; the internal-use
+  header is mandatory if any restricted name appears.
+- Gate 5 — Persona check. The target persona must be established before drafting
+  the counter-messages. Counter-messages must use the persona's language and
+  pain framing.
+- Gate 6 — Outcome-first. Counter-messages and "Where We Beat Them" bullets lead
+  with outcome or problem, never product name or feature.
+- Gate 7 — Length: every section earns its place. Use the section-level length
+  targets in Phase 3. Discipline comes from cutting repetition, not substance.
+  If a section has nothing sourced and credible to say, keep it short and note
+  the gap rather than inventing filler.
+- Gate 8 — SME Review. Mandatory. Run after drafting.
+
+---
+
+## Phase 5: SME Review
+
+After completing the draft, invoke the Subject Matter Expert review
+(@workflows/sme-review.md).
+
+The SME evaluates with particular emphasis for battle cards:
+- Technical accuracy of all competitor capability claims
+- Compliance/regulatory framing — are differentiators accurately stated and
+  defensible?
+- Deployment timeline comparisons — are both timelines grounded in evidence?
+- Proof point credibility — would a buyer in the target persona role accept
+  these numbers without pushback?
+- Competitive fairness — would a buyer who also evaluated the competitor find
+  the comparison honest?
+- Whether "Their Genuine Strengths" accurately represents the competitor's real
+  strengths, and "Their Real Weaknesses" is grounded in sourced fact
+- Market Position firmographics and sourced competitor claims — accurate,
+  current, and properly attributed?
+
+Apply all RED-severity revisions before presenting the final output. Apply or
+note YELLOW-severity items.
+
+Verdict options: APPROVED / APPROVED WITH REVISIONS / REQUIRES REWORK
+
+---
+
+## Phase 6: Write the Output File
+
+File path: sales-enablement/battle-cards/[product-slug]-vs-[competitor-slug].md
+
+where [product-slug] is the lowercase product name and [competitor-slug] is a
+hyphenated lowercase version of the competitor name.
+
+Write the finalized, SME-reviewed battle card to this file.
+
+---
+
+## Phase 7: Hand Off
+
+Report to the user:
+- Output file path as a clickable markdown link
+- SME final verdict (APPROVED vs. APPROVED post-revision)
+- Any flagged proof point gaps (product claims held because they are not in the
+  approved library)
+- Any competitor facts that could not be verified and were left out or flagged
+- Whether a competitive matrix file exists for this matchup — if not, recommend
+  creating one
+
+---
+
+## Escalation Paths
+
+Stop and ask before proceeding if:
+- Either argument (Product or Competitor) is missing or ambiguous
+- The competitor is not in context/competitive-landscape.md and no competitive
+  matrix file exists — flag as "no existing intelligence on file" and ask
+  whether to proceed from public research or defer until a matrix is built
+- The competitor turns out to belong to a different product scope — confirm
+  whether to switch product scope before writing
+- Any product metric you want to cite is not in the approved proof point
+  library — hold the claim and ask for source confirmation before including it
+- The SME returns a REQUIRES REWORK verdict — do not present a reworked draft as
+  final without completing the full re-review cycle
+</code></pre>
+      </div>
+    </section>
+  </main>
+
+  <dialog class="email-dialog" id="email-dialog" aria-label="Email address">
+    <p class="email-dialog__text">Prove you're human :)</p>
+    <p class="email-dialog__text">My email address is this site's domain at the most popular email provider in the
+      world. It ends in .com.</p>
+    <button type="button" class="email-dialog__close" aria-label="Close">&#x2715;</button>
+  </dialog>
+
+  <script src="js/main.js" defer></script>
+</body>
+
+</html>
