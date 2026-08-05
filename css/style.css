@@ -74,6 +74,26 @@ body {
   margin-bottom: 0;
 }
 
+/* Identity used as a link home (sub-pages) */
+.identity-link {
+  width: fit-content;
+  text-decoration: none;
+}
+
+.identity-link .hero__name {
+  transition: color 0.2s ease;
+}
+
+.identity-link:hover .hero__name {
+  color: var(--color-text-primary);
+}
+
+.identity-link:focus-visible {
+  outline: 2px solid var(--color-link-hover);
+  outline-offset: 4px;
+  border-radius: 4px;
+}
+
 .hero__title {
   font-family: 'Rinter', 'Space Grotesk', sans-serif;
   font-size: clamp(1.6rem, 4.5vw + 0.4rem, 3rem);
@@ -174,26 +194,6 @@ body {
   pointer-events: auto;
 }
 
-.site-nav__back {
-  display: inline-flex;
-  align-items: center;
-  gap: 0.5rem;
-}
-
-.site-nav__back-arrow {
-  transition: transform 0.2s ease;
-}
-
-.site-nav__back:hover .site-nav__back-arrow {
-  transform: translateX(-3px);
-}
-
-@media (prefers-reduced-motion: reduce) {
-  .site-nav__back-arrow {
-    transition: none;
-  }
-}
-
 button.link {
   appearance: none;
   background: none;
@@ -226,6 +226,14 @@ button.link {
   outline: 2px solid var(--color-link-hover);
   outline-offset: 4px;
   border-radius: 2px;
+}
+
+/* Current-page nav item: grayed out, not interactive */
+.link--current,
+.link--current:hover {
+  color: #6b6966;
+  border-bottom-color: transparent;
+  cursor: default;
 }
 
 .email-dialog {
