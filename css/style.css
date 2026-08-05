@@ -700,6 +700,25 @@ body.page-work {
   margin-bottom: 1.25rem;
 }
 
+.resource__title-link {
+  color: inherit;
+  text-decoration: none;
+  transition: text-decoration-color 0.2s ease;
+}
+
+.resource__title-link:hover {
+  text-decoration: underline;
+  text-decoration-thickness: 1px;
+  text-underline-offset: 4px;
+  text-decoration-color: var(--color-link-underline);
+}
+
+.resource__title-link:focus-visible {
+  outline: 2px solid var(--color-link-hover);
+  outline-offset: 4px;
+  border-radius: 2px;
+}
+
 .resource__preview {
   display: block;
   position: relative;
