@@ -38,7 +38,7 @@ The prototype is **fully functional** — open `Context Library Diagram.html` in
 **Headline (H1)**
 - Text: `One context library informing every` / (line break) / `AI-generated marketing asset.`
 - "context library" is emphasized at weight 500; the rest is weight 300
-- Font: Sneak, 34px / 42px, `letter-spacing: -.01em`
+- Font: Rinter, 34px / 42px, `letter-spacing: -.01em`
 - Color: Night Blue `#101037`
 
 **Top-right meta**
@@ -54,7 +54,7 @@ The prototype is **fully functional** — open `Context Library Diagram.html` in
 - Size: 296 × 70 px, white bg, `1px solid #e8e8e8`, radius 8px, shadow `0 1px 2px rgba(16,16,55,.06)`
 - Internal layout: flex row, 14px gap, 16px horizontal padding
 - Icon chip: 40×40, radius 4px, bg `#f4f4f4`, icon 20px Horizon Blue `#0f00db`
-- Name: Sneak 16px / 20px, weight 500, color `#101037`
+- Name: Rinter 16px / 20px, weight 500, color `#101037`
 - Sub-label: DM Mono 10.5px / 14px uppercase, `.06em` tracking, color `#8a8aa0`
 - The 8 cards, with icon (Lucide name) + sub-label:
   1. **Product docs** — `file-text` — "Specs · datasheets"
@@ -73,14 +73,14 @@ The prototype is **fully functional** — open `Context Library Diagram.html` in
 - Size ≈ 150 × 260, bg Night Blue `#101037`, radius 16px
 - Icon chip: 56×56, radius 8px, bg `rgba(255,255,255,.08)`, icon `git-merge` 28px in AI Green `#00ffca`
 - Eyebrow: `MCP` — DM Mono 11px uppercase `.12em`, AI Green `#00ffca`
-- Title: `Scan & ingest` — Sneak 22px / 27px weight 500, white
-- Desc: `Model Context Protocol streams every source into one pipe.` — Sneak 13px / 19px, `rgba(255,255,255,.66)`
+- Title: `Scan & ingest` — Rinter 22px / 27px weight 500, white
+- Desc: `Model Context Protocol streams every source into one pipe.` — Space Grotesk 13px / 19px, `rgba(255,255,255,.66)`
 
 **Claude node (Stage 03)**
 - Size ≈ 240 × 270, white bg, `1px solid #0f00db`, radius 16px, shadow `0 8px 24px rgba(16,16,55,.10)`
 - Icon chip: 56×56, radius 8px, bg Horizon Blue `#0f00db`, icon `sparkles` 28px white. A 1.5px Horizon-Blue ring pulses outward around it (see Interactions).
 - Eyebrow: `Claude` — Horizon Blue
-- Title: `Analyze & synthesize` — Sneak 22px weight 500, Night Blue
+- Title: `Analyze & synthesize` — Rinter 22px weight 500, Night Blue
 - Desc: `Reads, connects and distills context into brand-true knowledge.` — color `#4a4a66`
 
 **Memory node (Stage 04)**
@@ -90,7 +90,7 @@ The prototype is **fully functional** — open `Context Library Diagram.html` in
 - A diagonal white **shimmer sweep** crosses it periodically (see Interactions)
 - Icon chip: 56×56, radius 8px, bg `rgba(255,255,255,.18)`, icon `database` 28px white
 - Eyebrow: `Project memory` — `rgba(255,255,255,.85)`
-- Title: `Permanent project memory` — Sneak 22px / 27px weight 500, white
+- Title: `Permanent project memory` — Rinter 22px / 27px weight 500, white
 - Desc: `A persistent brand brain every generation draws from.` — `rgba(255,255,255,.9)`
 - Pill: `∞ Persistent · always-on` — DM Mono 10.5px uppercase `.1em`, bg `rgba(255,255,255,.16)`, white, pill radius, icon `infinity` 13px
 - Footnote below the node: `→ feeds every generated asset` — DM Mono 11px uppercase `.06em`, color `#8a8aa0`
@@ -118,7 +118,7 @@ The prototype uses an absolute-positioned 1680×1000 canvas scaled with JS. For 
 - Keep node min hit/visual sizes generous; text never below 12px.
 
 ## Design Tokens
-Pulled from the Aizon design system (`colors_and_type.css`, included in this bundle). Map these onto your site's existing tokens where possible.
+Defined in `colors_and_type.css`, included in this bundle. Map these onto your site's existing tokens where possible.
 
 **Colors**
 - Horizon Blue (primary) `#0f00db`
@@ -131,24 +131,24 @@ Pulled from the Aizon design system (`colors_and_type.css`, included in this bun
 - Horizon gradient: `linear-gradient(135deg, #0f00db 0%, #00ffca 100%)`
 
 **Typography**
-- Display / headings & body: **Sneak** (OTF included). H1 48/60 w300; H2 28/36 w400; H3 22/30 w500; H4 18/27 w700; Body 14/21 w400; Body-2 12/18.
+- Display / headings: **Rinter** (self-hosted at `assets/fonts/rinter-font/`, shipped with the site). H1 48/60 w300; H2 28/36 w400; H3 22/30 w500; H4 18/27 w700. Rinter ships a single 400 weight, so other weights fall through to Space Grotesk.
+- Body: **Space Grotesk** (Google Fonts, weights 300–700). Body 14/21 w400; Body-2 12/18.
 - Mono / eyebrows, labels, data: **DM Mono** (TTF included), light/regular/medium, uppercase + `.08–.14em` tracking.
-- Fallback (slides/legal): **DM Sans**.
 
 **Spacing (4pt grid):** 4, 8, 12, 16, 24, 32, 48, 64, 96
 **Radius:** xs 2, sm 4, md 8, lg 16, xl 24, pill 999
 **Shadows:** xs `0 1px 2px rgba(16,16,55,.06)`, sm `0 2px 6px rgba(16,16,55,.08)`, md `0 8px 24px rgba(16,16,55,.10)`, lg `0 20px 48px rgba(16,16,55,.14)`, focus ring `0 0 0 3px rgba(15,0,219,.22)`
 
 ## Assets
-- **Fonts** (in `fonts/`): Sneak (Light/Regular/Medium/Bold OTF), DM Mono (Light/Regular/Medium TTF). Self-host these; reference via the `@font-face` blocks in `colors_and_type.css`. Verify your license covers web use before shipping publicly.
-- **Icons:** [Lucide](https://lucide.dev) (MIT) is used as a stand-in for Aizon's marketing icon set. The prototype loads it from CDN (`unpkg.com/lucide@latest`). In production, install `lucide` (or your framework's Lucide package, e.g. `lucide-react`) and import only the icons listed per source card above, plus `git-merge`, `sparkles`, `database`, `infinity`. Icons are **stroke-only, 2px**, color inherits from context (Horizon Blue on light, white/green on dark).
+- **Fonts:** DM Mono (Light/Regular/Medium TTF) is self-hosted in `fonts/`. Rinter is self-hosted at `assets/fonts/rinter-font/` alongside the rest of the site and referenced via a relative `@font-face` in `colors_and_type.css`. Space Grotesk loads from Google Fonts in the HTML `<head>`.
+- **Icons:** [Lucide](https://lucide.dev) (MIT) is used as a stand-in for the marketing icon set. The prototype loads it from CDN (`unpkg.com/lucide@latest`). In production, install `lucide` (or your framework's Lucide package, e.g. `lucide-react`) and import only the icons listed per source card above, plus `git-merge`, `sparkles`, `database`, `infinity`. Icons are **stroke-only, 2px**, color inherits from context (Horizon Blue on light, white/green on dark).
 - **No images/photography.** Everything is type, color, SVG lines, and icons.
-- The Aizon wordmark was intentionally **removed** from this asset — do not add a logo.
+- No wordmark or logo on this asset — do not add one.
 
 ## Files
 - `Context Library Diagram.html` — the complete, runnable design reference (markup + CSS + connector-building JS in one file).
-- `colors_and_type.css` — the Aizon design tokens + `@font-face` declarations + utility classes referenced by the HTML.
-- `fonts/` — Sneak + DM Mono font files used by the CSS.
+- `colors_and_type.css` — the design tokens + `@font-face` declarations + utility classes referenced by the HTML.
+- `fonts/` — DM Mono font files used by the CSS. Rinter lives in the site-wide `assets/fonts/`.
 - `screenshots/context-library-diagram.png` — rendered reference image of the full diagram.
 
 Open the HTML directly in a browser to see the exact intended result before recreating it.

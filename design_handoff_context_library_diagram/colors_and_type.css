@@ -1,43 +1,17 @@
 /* ==========================================================================
-   Aizon — Colors & Typography
-   Source of truth for the Aizon Design System.
-   Extends the tokens from the official zeroheight playbook with semantic
-   aliases and a full type ramp ready to drop into any page.
+   Colors & Typography
+   Design tokens for this diagram — semantic aliases and a full type ramp
+   ready to drop into any page.
    ========================================================================== */
 
-/* ---------- Fonts ---------- */
+/* ---------- Fonts ----------
+   Display face is Rinter, self-hosted alongside the rest of the site.
+   Space Grotesk (Google Fonts) covers the weights Rinter doesn't ship.
+   DM Mono is self-hosted in ./fonts/. */
 @font-face {
-  font-family: "Sneak";
-  src: url("fonts/Sneak-Light.otf") format("opentype");
-  font-weight: 300;
-  font-style: normal;
-  font-display: swap;
-}
-@font-face {
-  font-family: "Sneak";
-  src: url("fonts/Sneak-Regular.otf") format("opentype");
+  font-family: "Rinter";
+  src: url("../assets/fonts/rinter-font/Rinter.otf") format("opentype");
   font-weight: 400;
-  font-style: normal;
-  font-display: swap;
-}
-@font-face {
-  font-family: "Sneak";
-  src: url("fonts/Sneak-Regular-Italic.otf") format("opentype");
-  font-weight: 400;
-  font-style: italic;
-  font-display: swap;
-}
-@font-face {
-  font-family: "Sneak";
-  src: url("fonts/Sneak-Medium.otf") format("opentype");
-  font-weight: 500;
-  font-style: normal;
-  font-display: swap;
-}
-@font-face {
-  font-family: "Sneak";
-  src: url("fonts/Sneak-Bold.otf") format("opentype");
-  font-weight: 700;
   font-style: normal;
   font-display: swap;
 }
@@ -58,24 +32,6 @@
   font-family: "DM Mono";
   src: url("fonts/DMMono-Medium.ttf") format("truetype");
   font-weight: 500;
-  font-display: swap;
-}
-@font-face {
-  font-family: "DM Sans";
-  src: url("fonts/DMSans-Regular.ttf") format("truetype");
-  font-weight: 400;
-  font-display: swap;
-}
-@font-face {
-  font-family: "DM Sans";
-  src: url("fonts/DMSans-Medium.ttf") format("truetype");
-  font-weight: 500;
-  font-display: swap;
-}
-@font-face {
-  font-family: "DM Sans";
-  src: url("fonts/DMSans-Bold.ttf") format("truetype");
-  font-weight: 700;
   font-display: swap;
 }
 
@@ -167,32 +123,32 @@
   --shadow-focus: 0 0 0 3px rgba(15, 0, 219, 0.22);
 
   /* ---------- Type — raw families ---------- */
-  --font-sans:    "Sneak", "DM Sans", -apple-system, BlinkMacSystemFont, "Helvetica Neue", Arial, sans-serif;
-  --font-display: "Sneak", "DM Sans", -apple-system, BlinkMacSystemFont, sans-serif;
+  --font-sans:    "Space Grotesk", -apple-system, BlinkMacSystemFont, "Helvetica Neue", Arial, sans-serif;
+  --font-display: "Rinter", "Space Grotesk", -apple-system, BlinkMacSystemFont, sans-serif;
   --font-mono:    "DM Mono", ui-monospace, "SF Mono", Menlo, Consolas, monospace;
-  --font-internal: "DM Sans", -apple-system, BlinkMacSystemFont, sans-serif;
+  --font-internal: "Space Grotesk", -apple-system, BlinkMacSystemFont, sans-serif;
 
-  /* ---------- Type — scale (from zeroheight tokens) ---------- */
-  /* Display / H1 — Sneak Light */
+  /* ---------- Type — scale ---------- */
+  /* Display / H1 — Rinter, light weight */
   --h1-family: var(--font-display);
   --h1-size: 48px;
   --h1-line: 60px;
   --h1-weight: 300;
   --h1-letter: -0.01em;
 
-  /* H2 — Sneak Regular */
+  /* H2 — Rinter, regular */
   --h2-family: var(--font-display);
   --h2-size: 28px;
   --h2-line: 36px;
   --h2-weight: 400;
 
-  /* H3 — Sneak Medium (additive, not in tokens.json but implied) */
+  /* H3 — Rinter, medium (additive) */
   --h3-family: var(--font-display);
   --h3-size: 22px;
   --h3-line: 30px;
   --h3-weight: 500;
 
-  /* H4 — Sneak Bold */
+  /* H4 — Rinter, bold */
   --h4-family: var(--font-display);
   --h4-size: 18px;
   --h4-line: 27px;
@@ -205,19 +161,19 @@
   --label-weight: 300;
   --label-tracking: 0.08em;
 
-  /* Body 1 — Sneak Regular */
+  /* Body 1 — Space Grotesk regular */
   --body1-family: var(--font-sans);
   --body1-size: 14px;
   --body1-line: 21px;
   --body1-weight: 400;
 
-  /* Body 2 — Sneak Regular 12 */
+  /* Body 2 — Space Grotesk regular 12 */
   --body2-family: var(--font-sans);
   --body2-size: 12px;
   --body2-line: 18px;
   --body2-weight: 400;
 
-  /* Caption / legal — DM Sans */
+  /* Caption / legal — Space Grotesk */
   --caption-family: var(--font-internal);
   --caption-size: 10px;
   --caption-line: 15px;
