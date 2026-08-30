@@ -16,3 +16,6 @@ Icon?
 # Logs & OS junk
 *.log
 Thumbs.db
+
+# Source material not meant for deployment
+/stuff/
