@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description"
+    content="Why the subject matter expert reviewer is the most valuable agent on my AI marketing team: a narrow scope, a fixed output format, and a gate enforced in code.">
+  <title>The agent that's allowed to say no — Sam Morris-Rosenstein</title>
+
+  <link rel="icon" type="image/svg+xml" href="favicon.svg">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400&family=Space+Grotesk:wght@300;400;500&display=swap"
+    rel="stylesheet">
+
+  <link rel="stylesheet" href="css/style.css">
+</head>
+
+<body class="page-entry">
+  <nav class="site-nav" aria-label="Site navigation">
+    <div class="site-nav__inner">
+      <a href="work.html" class="link" aria-label="Back to my work">Work</a>
+      <a href="https://www.linkedin.com/in/smorrisrosenstein/" class="link" aria-label="Sam Morris on LinkedIn"
+        target="_blank" rel="noopener noreferrer">LinkedIn</a>
+      <button type="button" class="link" id="email-trigger" aria-label="Email Sam Morris">Email</button>
+    </div>
+  </nav>
+
+  <main class="entry">
+    <article>
+      <header class="entry__header">
+        <a href="index.html" class="hero__identity identity-link" aria-label="Go to homepage">
+          <img src="assets/sam-photo.jpg" alt="Sam Morris-Rosenstein" class="hero__photo" width="36" height="36">
+          <p class="hero__name">SAM MORRIS-ROSENSTEIN</p>
+        </a>
+        <h1 class="hero__title">The most valuable agent on my AI marketing team is the one that's allowed to say no</h1>
+      </header>
+
+      <section class="entry__section">
+        <p class="entry__body">The dangerous AI-generated copy isn't the marketing hype. Hype is easy to spot, and you
+          can ban &ldquo;revolutionary&rdquo; with a word list. The dangerous copy is the stuff that sounds right because
+          you're not a subject matter expert, but will instantly stand out to your buyers who are.</p>
+        <p class="entry__body">I market software to pharmaceutical manufacturers. My buyers are heads of Quality,
+          process engineers and operations leaders. They all have STEM master's degrees and some of them have PhDs. A
+          sentence that looks right to me might set off alarm bells to them and tell them I have no idea what I'm
+          talking about.</p>
+        <p class="entry__body">When I moved most of my content production into Claude Code, I built a team of agents: a
+          product marketer, a content writer, an ad copywriter, a demand-gen strategist and a performance analyst. The
+          agent that delivers the most value is none of those. It's the subject matter expert, and nothing
+          customer-facing ships without its verdict.</p>
+      </section>
+
+      <section class="entry__section">
+        <h2 class="entry__heading">A reviewer, not a writer</h2>
+        <p class="entry__body">The subject matter expert agent is defined in its own file, and the persona is
+          deliberately specific. It has a chemical engineering background, 15+ years in Quality, Process Engineering
+          and Operations at pharma manufacturers and contract manufacturers, and now advises manufacturers on
+          operational strategy. It has sat in the buyer's chair.</p>
+        <p class="entry__body">The most important lines in that file say what it does <strong>not</strong> do. It
+          doesn't rewrite for tone, judge headlines, assess campaign strategy or give marketing feedback of any kind.
+          Its single question is whether each claim would survive scrutiny from a VP of Quality or a Director of
+          Process Engineering.</p>
+        <p class="entry__body">Giving it a narrow scope is what makes it useful. A reviewer allowed to comment on
+          everything turns into a second copywriter, its domain flags get lost among style suggestions, and the writers
+          learn to ignore it.</p>
+      </section>
+
+      <section class="entry__section">
+        <h2 class="entry__heading">What it checks</h2>
+        <p class="entry__body">The reviewer works through three passes:</p>
+        <ol class="entry__steps">
+          <li class="entry__step"><strong>Technical claim audit.</strong> It lists every factual claim, metric,
+            regulatory reference and competitive comparison. Is each one accurate? Does it trace to our approved
+            proof-point library? Is it attached to the right product?</li>
+          <li class="entry__step"><strong>Credibility screen.</strong> It reads the whole piece as the target buyer
+            would and flags anything that would trigger skepticism: inflated claims, misused terminology,
+            oversimplified regulation, pain points that don't match the reader's actual job.</li>
+          <li class="entry__step"><strong>Competitive fairness.</strong> Would a buyer who also evaluated the competitor
+            call our comparison honest?</li>
+        </ol>
+        <p class="entry__body">It applies 13 named review lenses, written in the language of the domain rather than
+          marketing. They cover batch variability, critical process parameter (CPP) and critical quality attribute
+          (CQA) methodology, regulatory positioning, and calibrating technical depth to the persona.</p>
+        <p class="entry__body">The output has a fixed format:</p>
+        <ul class="entry__list">
+          <li class="entry__list-item"><strong>Every flag</strong> carries a severity, the exact text, why a buyer
+            would object, and a suggested revision.</li>
+          <li class="entry__list-item"><strong>RED</strong> means it's wrong or materially overstated and must be fixed
+            before anything ships.</li>
+          <li class="entry__list-item"><strong>YELLOW</strong> means it isn't wrong, but a professional would find it
+            imprecise or off.</li>
+          <li class="entry__list-item"><strong>The verdict</strong> is APPROVED, APPROVED WITH REVISIONS or REQUIRES
+            REWORK.</li>
+        </ul>
+        <p class="entry__body">The writing agent fixes only what was flagged, and the expert re-reviews only those
+          items.</p>
+        <p class="entry__body">There's also one governance rule I'd keep in any version of this: <strong>marketing
+            reasoning can't overrule a RED flag.</strong> If the expert says a claim fails, it gets revised or removed.
+          Arguing it into submission isn't an option.</p>
+      </section>
+
+      <section class="entry__section">
+        <h2 class="entry__heading">What it actually catches</h2>
+        <p class="entry__body">Here are some real flags, lightly anonymised:</p>
+        <ul class="entry__list">
+          <li class="entry__list-item"><strong>&ldquo;Calculations run in the record, so a transcription error cannot
+              carry into the next step.&rdquo;</strong> Overstated. Running calculations inline removes arithmetic
+            errors, but an operator who misreads an instrument and types the wrong value has still made a
+            transcription error. A QA head will catch &ldquo;cannot&rdquo; immediately.</li>
+          <li class="entry__list-item"><strong>&ldquo;The parameter data still lives on paper.&rdquo;</strong> Wrong in
+            a way any process engineer would notice. Process parameters live in control systems and historians. What
+            paper holds is execution context: setpoints actually used, material lots, operator actions.</li>
+          <li class="entry__list-item"><strong>&ldquo;100% content fidelity.&rdquo;</strong> It's an absolute claim,
+            and the first customer to find one dropped note discredits the rep and the product. We described the
+            verification mechanism instead.</li>
+          <li class="entry__list-item"><strong>An approval step described as &ldquo;replaced with a
+              checkbox.&rdquo;</strong> To a Quality reader, that sounds like a shortcut around electronic-signature
+            rules. We reworded it to say exactly what is recorded.</li>
+          <li class="entry__list-item"><strong>Even a data project.</strong> When I built a classifier that sorts CRM
+            contacts into teams by job title, the expert overturned exclusions that looked obvious to a marketer.</li>
+        </ul>
+        <p class="entry__body">None of these are hype. Every one would pass a brand-voice check, and every one would
+          have cost us credibility with the people we are trying to sell to.</p>
+      </section>
+
+      <section class="entry__section">
+        <h2 class="entry__heading">Making &ldquo;mandatory&rdquo; actually mandatory</h2>
+        <p class="entry__body">Writing &ldquo;all content must pass expert review&rdquo; into your instructions is a
+          good start. It's also a rule a busy agent will occasionally skip. So the gate exists in three places.</p>
+        <ol class="entry__steps">
+          <li class="entry__step"><strong>In the operating instructions.</strong> The project's <code
+              class="entry__inline-code">CLAUDE.md</code> defines twelve quality gates. Expert review is Gate 9:
+            customer-facing and sales-facing output isn't final until it passes. Every workflow, from ads and emails to
+            one-pagers and battle cards, ends with the review step.</li>
+          <li class="entry__step"><strong>In deterministic hooks.</strong> Claude Code supports hooks, scripts that run
+            automatically on events. I split my rules into two groups:
+            <ul class="entry__list">
+              <li class="entry__list-item"><strong>Rules that string matching can enforce are Python.</strong> A lint
+                hook blocks banned hype terms and a few category-positioning mistakes before a file is written. Run
+                against every in-scope file in the repo, it blocked three, and all three were genuine problems. A
+                metric hook lists any percentage or dollar figure that isn't in our approved sources, as advice rather
+                than a block.</li>
+              <li class="entry__list-item"><strong>Rules that need judgement go to the expert agent.</strong></li>
+            </ul>
+          </li>
+          <li class="entry__step"><strong>In a Stop hook.</strong> When Claude tries to end its turn, a script checks
+            whether customer-facing files were written without an SME Review Verdict. If so, the turn can't end until
+            the review happens.</li>
+        </ol>
+        <p class="entry__body">The escape hatches are deliberate. I can type &ldquo;skip SME&rdquo; to stand the gate
+          down for a session, and every hook fails open, so a crash never blocks work. Strict where it counts and easy
+          to override on purpose is a better design than strict everywhere.</p>
+      </section>
+
+      <section class="entry__section">
+        <h2 class="entry__heading">What the reviewer knows, and what it doesn't</h2>
+        <p class="entry__body">The expert is only as good as its context. It loads the product overview, the approved
+          proof-point library and the competitive landscape on every review, plus capacity or persona material when the
+          content touches those. Its job isn't to know everything from memory. Its job is to check the content against
+          what's true.</p>
+        <p class="entry__body">It also needs to remember rulings. Sometimes I approve a claim the reviewer would
+          otherwise keep flagging, because leadership has signed off on it or because the edge case it worries about
+          only matters on request. I record that ruling, so the expert doesn't relitigate it every time. Without that,
+          a strict reviewer turns into a noisy one, and a noisy reviewer gets ignored.</p>
+        <p class="entry__body">To be honest about the limits: this is a model playing an expert. It doesn't replace a
+          real expert's sign-off on high-stakes material, and every asset that is customer facing still goes through a
+          human subject matter expert before publication. What this agent does is raise the floor. The
+          obvious-to-a-buyer mistakes never reach a human reviewer, which makes their time far more valuable.</p>
+      </section>
+
+      <section class="entry__section">
+        <h2 class="entry__heading">Building your own</h2>
+        <ol class="entry__steps">
+          <li class="entry__step"><strong>Write the persona from your buyer's side of the table.</strong> Give it a
+            career, not a job title, and make it someone your customers would recognise as a peer.</li>
+          <li class="entry__step"><strong>Fence it in.</strong> List the marketing feedback it isn't allowed to give.</li>
+          <li class="entry__step"><strong>Give it a fixed output format:</strong> severity, exact text, the buyer's
+            objection, a suggested revision and a verdict.</li>
+          <li class="entry__step"><strong>Ground it in a source of truth,</strong> with an approved claims library that
+            every metric must trace to.</li>
+          <li class="entry__step"><strong>Enforce it in code.</strong> Lint what string matching can catch, and use a
+            hook to stop the agent from finishing without a verdict.</li>
+          <li class="entry__step"><strong>Record your rulings,</strong> so strictness doesn't turn into noise.</li>
+        </ol>
+        <p class="entry__body">AI made producing content cheap. It didn't make being right cheap. In a technical market,
+          the agent that protects your credibility is worth more than the ones that produce your copy.</p>
+      </section>
+    </article>
+  </main>
+
+  <dialog class="email-dialog" id="email-dialog" aria-label="Email address">
+    <p class="email-dialog__text">Prove you're human :)</p>
+    <p class="email-dialog__text">My email address is this site's domain at the most popular email provider in the
+      world. It ends in .com.</p>
+    <button type="button" class="email-dialog__close" aria-label="Close">&#x2715;</button>
+  </dialog>
+
+  <script src="js/main.js" defer></script>
+</body>
+
+</html>
