@@ -1,0 +1,224 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description"
+    content="How I built a competitor watch system in Claude Code: deterministic detection in Python, AI interpretation in a fixed schema, and humans in the loop where it matters.">
+  <title>Your competitive intel is probably stale — Sam Morris-Rosenstein</title>
+
+  <link rel="icon" type="image/svg+xml" href="favicon.svg">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400&family=Space+Grotesk:wght@300;400;500&display=swap"
+    rel="stylesheet">
+
+  <link rel="stylesheet" href="css/style.css">
+</head>
+
+<body class="page-entry">
+  <nav class="site-nav" aria-label="Site navigation">
+    <div class="site-nav__inner">
+      <a href="work.html" class="link" aria-label="Back to my work">Work</a>
+      <a href="https://www.linkedin.com/in/smorrisrosenstein/" class="link" aria-label="Sam Morris on LinkedIn"
+        target="_blank" rel="noopener noreferrer">LinkedIn</a>
+      <button type="button" class="link" id="email-trigger" aria-label="Email Sam Morris">Email</button>
+    </div>
+  </nav>
+
+  <main class="entry">
+    <article>
+      <header class="entry__header">
+        <a href="index.html" class="hero__identity identity-link" aria-label="Go to homepage">
+          <img src="assets/sam-photo.jpg" alt="Sam Morris-Rosenstein" class="hero__photo" width="36" height="36">
+          <p class="hero__name">SAM MORRIS-ROSENSTEIN</p>
+        </a>
+        <h1 class="hero__title">Your competitive intel is probably stale. Here's how I built a system that tells me when.</h1>
+      </header>
+
+      <section class="entry__section">
+        <p class="entry__body">Every B2B marketing team has the same artifact: a competitive matrix that was excellent
+          the week someone wrote it. It's deep and well sourced, the sales team trusts it, and then it quietly rots. No
+          one wants to own the process of keeping it up to date, because doing so by hand takes forever and it's not
+          fun work.</p>
+        <p class="entry__body">Now, you would think &ldquo;AI can do this for me&rdquo;, and the answer is yes, it can,
+          but there is a wrong way and right way to do it.</p>
+        <p class="entry__body">To solve this, I built a competitor watch system that always delivers exact outputs. It
+          runs in Claude Code, and the part I'm proudest of is how little of it depends on the LLM making judgement
+          calls.</p>
+      </section>
+
+      <section class="entry__section">
+        <h2 class="entry__heading">The design principle: deterministic detection, AI interpretation</h2>
+        <p class="entry__body">The impulse most teams will have is to ask an LLM to write a competitive brief about a
+          competitor and then, periodically, to go back to their website and recheck everything and update the
+          document with whatever is new. This is the wrong way to do it. Working this way, you're asking the LLM to
+          make way too many judgment calls.</p>
+        <p class="entry__body">Your outputs will look good, but every time you re-run the process the model will make
+          small changes that you didn't account for and won't notice, and slowly your structure and content will
+          start to drift. After many runs, your matrices for each competitor will be different from each other, and
+          you'll find you're missing information that is important.</p>
+        <p class="entry__body">I split the system into four layers with a hard line through the middle:</p>
+        <ol class="entry__steps">
+          <li class="entry__step"><strong>Crawl and diff.</strong> Python, no LLM. The same input always produces the
+            same output.</li>
+          <li class="entry__step"><strong>Materiality gate.</strong> Python, no LLM. A closed rule set assigns every
+            change a tier.</li>
+          <li class="entry__step"><strong>Analysis.</strong> Claude, working from a small, structured packet.</li>
+          <li class="entry__step"><strong>Delivery.</strong> A Google Doc report, updated matrices, and state committed
+            to git.</li>
+        </ol>
+        <p class="entry__body">Everything above the line decides <em>what</em> changed. Claude only decides <em>what it
+            means</em>. That boundary is the whole point.</p>
+      </section>
+
+      <section class="entry__section">
+        <h2 class="entry__heading">The orchestrator: a Claude Code skill</h2>
+        <p class="entry__body">The entry point is a Claude Code skill: I type <code
+            class="entry__inline-code">/competitor-watch</code> and the run begins. The skill file itself is
+          deliberately thin. It points to a procedure document kept in version control, so every run follows exactly
+          the same steps, wherever it's launched from.</p>
+        <p class="entry__body">That procedure walks Claude through eight steps:</p>
+        <ol class="entry__steps">
+          <li class="entry__step">Run the scan (a Python command).</li>
+          <li class="entry__step">Read the change packet the scan produced.</li>
+          <li class="entry__step">Load our own positioning: the competitive matrix and battle card for each competitor
+            with a material change.</li>
+          <li class="entry__step">Produce one structured finding per material change.</li>
+          <li class="entry__step">Write the analysis back into the packet, then draft edits to the affected matrices.</li>
+          <li class="entry__step">Render the report and publish it.</li>
+          <li class="entry__step">Send any drafted change to sales guidance through an expert review pass.</li>
+          <li class="entry__step">Show me every edit as a before and after. I approve, amend or drop each one, and only
+            then does Claude apply it and republish.</li>
+        </ol>
+        <p class="entry__body">The skill handles the orchestration: running scripts, reading files, reasoning about
+          impact, drafting edits and publishing. The scripts handle everything that needs to be repeatable.</p>
+      </section>
+
+      <section class="entry__section">
+        <h2 class="entry__heading">The Python layer: where the real work happens</h2>
+        <p class="entry__body">The crawler is plain Python, standard library only, so it runs anywhere without a
+          dependency install. Per competitor, it:</p>
+        <ul class="entry__list">
+          <li class="entry__list-item"><strong>Finds pages</strong> through the sitemap that robots.txt declares,
+            falling back to common sitemap paths when that one is stale.</li>
+          <li class="entry__list-item"><strong>Harvests links from hub pages,</strong> because a sitemap is a floor,
+            not a ceiling. We found a live customer story that wasn't in its sitemap.</li>
+          <li class="entry__list-item"><strong>Fetches politely.</strong> It respects robots.txt, sends one request
+            every 1.5 seconds per host, and never goes behind a login or a form.</li>
+          <li class="entry__list-item"><strong>Extracts and normalises the text,</strong> stripping navigation,
+            footers and cookie banners, then hashes it.</li>
+          <li class="entry__list-item"><strong>Diffs each page</strong> against the stored text from the last run.</li>
+          <li class="entry__list-item"><strong>Sweeps every page for tripwires.</strong> These are regex patterns
+            seeded from the &ldquo;monitoring triggers&rdquo; in our own matrices. Has this competitor published a
+            compliance claim? Entered our vertical? Launched a pricing page?</li>
+        </ul>
+        <p class="entry__body">Then the <strong>materiality gate</strong> tiers every change by rules, not vibes:</p>
+        <ul class="entry__list">
+          <li class="entry__list-item"><strong>T1:</strong> a critical tripwire firing for the first time, a URL that
+            used to 404 now resolving, or a new product or pricing page.</li>
+          <li class="entry__list-item"><strong>T2:</strong> a metadata change on a watched page, a new case study, or a
+            heavy rewrite of a key page.</li>
+          <li class="entry__list-item"><strong>T3:</strong> routine content, such as a new blog post, listed in the
+            appendix.</li>
+          <li class="entry__list-item"><strong>T0:</strong> noise, dropped and counted.</li>
+        </ul>
+        <p class="entry__body">Only T1 and T2 reach Claude. That keeps the model's input small, which keeps both cost
+          and variance down.</p>
+      </section>
+
+      <section class="entry__section">
+        <h2 class="entry__heading">Structured outputs: how I pinned the LLM's shape</h2>
+        <p class="entry__body">Even in the analysis layer, Claude isn't writing free-form prose. Every finding is a
+          structured object with constrained fields:</p>
+        <ul class="entry__list">
+          <li class="entry__list-item"><strong>Classification</strong> comes from a closed list of eleven values:
+            product-launch, capability-added, messaging-shift, proof-added, compliance-posture-change and so on.</li>
+          <li class="entry__list-item"><strong>Impact</strong> is HIGH, MEDIUM or LOW, against a written rubric. HIGH
+            means the change closes a gap we currently exploit or invalidates a sales counter-message.</li>
+          <li class="entry__list-item"><strong>Action</strong> also comes from a closed list: update the matrix, update
+            the battle card, brief sales, request research, or no action.</li>
+          <li class="entry__list-item"><strong>Invalidates</strong> names the exact claim in our own material that just
+            went stale.</li>
+        </ul>
+        <p class="entry__body">The wording varies from run to run. Which items surface, and how they're rated, does
+          not.</p>
+        <p class="entry__body">The competitive matrices themselves are now <strong>YAML claim stores</strong>. Every
+          claim has an ID, a section, an as-of date, a status and a source. The human-readable matrix and the published
+          Confluence page are <em>generated</em> from the YAML. Nobody edits them by hand, and a check fails if anyone
+          does.</p>
+        <p class="entry__body">When the crawl finds that a claim is stale, Claude doesn't rewrite a paragraph. It
+          drafts a batch of typed operations: <code class="entry__inline-code">replace_text</code> on a specific claim
+          ID, <code class="entry__inline-code">trigger_fired</code> on a monitoring trigger, <code
+            class="entry__inline-code">flag_stale</code> on anything that needs more research. A Python CLI validates
+          and previews the batch before anything touches the source. So an AI-suggested change can be diffed, reviewed
+          and reversed, like any code change.</p>
+      </section>
+
+      <section class="entry__section">
+        <h2 class="entry__heading">Humans stay in the loop where it matters</h2>
+        <ul class="entry__list">
+          <li class="entry__list-item"><strong>Edits wait for approval.</strong> I approve every matrix edit in the
+            session. Battle cards stay flag-only: the system names the stale line and recommends a fix, and a person
+            makes the change.</li>
+          <li class="entry__list-item"><strong>Sales guidance gets expert review.</strong> Any change to sales-facing
+            guidance goes through a domain-expert review agent first.</li>
+          <li class="entry__list-item"><strong>Absence claims carry a date.</strong> The report never says &ldquo;they
+            don't have X.&rdquo; It says &ldquo;X is absent from the 407 pages crawled on 10 September.&rdquo;</li>
+          <li class="entry__list-item"><strong>Unseen means unseen.</strong> If a site blocked us, the Run Health
+            section says that competitor wasn't seen this run. It never implies nothing changed.</li>
+        </ul>
+      </section>
+
+      <section class="entry__section">
+        <h2 class="entry__heading">The test that makes it trustworthy</h2>
+        <p class="entry__body">The acceptance test is simple. Run two scans back to back against unchanged sites, and
+          the system must report zero changes. We're at 99.96% stable across about 2,500 pages. The one offender is a
+          page that genuinely renders differently from one fetch to the next.</p>
+        <p class="entry__body">Getting there taught me things you can't guess in advance:</p>
+        <ul class="entry__list">
+          <li class="entry__list-item"><strong><code class="entry__inline-code">lastmod</code> dates are
+              useless.</strong> CMS-wide republishes stamp hundreds of pages with the same date, so content hashing is
+            the only honest signal.</li>
+          <li class="entry__list-item"><strong>Noise filtering can eat whole pages.</strong> One site wraps every
+            content block in a class we'd flagged as chrome, and its homepage extracted to 25 characters.</li>
+          <li class="entry__list-item"><strong>Tripwires cry wolf.</strong> &ldquo;CSV&rdquo; means comma-separated
+            values far more often than computer system validation, and &ldquo;CMO&rdquo; can be Contract Manufacturing
+            Organization or Chief Marketing Officer. Prefer a pattern that misses a soft mention over one that fires on
+            noise.</li>
+          <li class="entry__list-item"><strong>A run that can't see a site must not touch that site's state.</strong> A
+            blocked crawl once looked exactly like a competitor deleting its entire website.</li>
+        </ul>
+      </section>
+
+      <section class="entry__section">
+        <h2 class="entry__heading">Where to start</h2>
+        <p class="entry__body">You don't need all of this on day one. Start with:</p>
+        <ol class="entry__steps">
+          <li class="entry__step">A registry of competitors, their domains and the pages you care most about.</li>
+          <li class="entry__step">A Python crawl-and-diff script that stores normalised text and hashes in git.</li>
+          <li class="entry__step">A handful of tripwires taken from your own battle cards' &ldquo;if they ever do X, our
+            message breaks&rdquo; list.</li>
+          <li class="entry__step">A Claude Code skill that runs the script, reads the diff, and writes findings in a
+            fixed schema.</li>
+        </ol>
+        <p class="entry__body">Run it two or three times and tune the noise rules before you trust it. Then move your
+          matrices into structured YAML, so the system can tell you exactly which sentence just went stale.</p>
+        <p class="entry__body">The value of this system isn't the changelog. It's the one sentence that tells a sales
+          rep their counter-message stopped working this morning.</p>
+      </section>
+    </article>
+  </main>
+
+  <dialog class="email-dialog" id="email-dialog" aria-label="Email address">
+    <p class="email-dialog__text">Prove you're human :)</p>
+    <p class="email-dialog__text">My email address is this site's domain at the most popular email provider in the
+      world. It ends in .com.</p>
+    <button type="button" class="email-dialog__close" aria-label="Close">&#x2715;</button>
+  </dialog>
+
+  <script src="js/main.js" defer></script>
+</body>
+
+</html>

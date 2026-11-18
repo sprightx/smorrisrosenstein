@@ -895,6 +895,53 @@ body.page-entry {
   margin: 0;
 }
 
+/* Article prose: stacked paragraphs and lists inside an entry section */
+.entry__body + .entry__body {
+  margin-top: 1.1rem;
+}
+
+.entry__steps + .entry__body,
+.entry__list + .entry__body {
+  margin-top: 1.5rem;
+}
+
+.entry__body strong,
+.entry__step strong,
+.entry__list-item strong {
+  font-weight: 500;
+  color: var(--color-text-primary);
+}
+
+.entry__list {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 0.85rem;
+  margin: 1.25rem 0 0;
+  padding: 0;
+}
+
+.entry__list-item {
+  position: relative;
+  padding-left: 1.5rem;
+  font-family: 'Space Grotesk', -apple-system, BlinkMacSystemFont, sans-serif;
+  font-size: 0.9375rem;
+  font-weight: 300;
+  line-height: 1.65;
+  color: var(--color-text-secondary);
+}
+
+.entry__list-item::before {
+  content: '';
+  position: absolute;
+  left: 0.3rem;
+  top: 0.68em;
+  width: 5px;
+  height: 5px;
+  border-radius: 50%;
+  background: var(--color-link-underline);
+}
+
 .entry__steps {
   list-style: none;
   counter-reset: step;
